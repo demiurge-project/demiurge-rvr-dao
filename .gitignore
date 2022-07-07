@@ -32,3 +32,4 @@
 *.appe*/a/b/c/*
 
 build/
+.vscode/

@@ -36,6 +36,7 @@
 #include <argos3/plugins/robots/rvr/control_interface/ci_rvr_proximity_sensor.h>
 #include <argos3/plugins/robots/rvr/control_interface/ci_rvr_light_sensor.h>
 #include <argos3/plugins/robots/rvr/control_interface/ci_rvr_ground_color_sensor.h>
+#include <argos3/plugins/robots/rvr/control_interface/ci_rvr_lidar_sensor.h>
 
 namespace argos
 {
@@ -112,6 +113,21 @@ namespace argos
          */
         virtual void SetProximityInput(CCI_RVRProximitySensor::TReadings s_prox_input){};
 
+        /*
+         * Setter for the lidar input.
+         */
+        virtual void SetLidarInput(CCI_RVRLidarSensor::TReadings s_lidar_input){};
+
+        /*
+         * Getter for the lidar input
+         */
+
+        virtual CCI_RVRLidarSensor::TReadings GetLidarInput() const
+        {
+            CCI_RVRLidarSensor::TReadings lidarReadings;
+            return lidarReadings;
+        }
+
         virtual CCI_RVRLightSensor::SReading GetLightReading()
         { // RM 1.2
             return CCI_RVRLightSensor::SReading();
@@ -125,21 +141,20 @@ namespace argos
         /*
          * Getter for the ground input.
          */
-        // virtual CCI_RVRGroundColorSensor:: GetGroundInput()
-        // { // RM 1.1
-        //     CCI_EPuckGroundSensor::SReadings emptyReadings;
-        //     return emptyReadings;
-        // };
+        virtual CCI_RVRGroundColorSensor::SReading GetGroundInput()
+        { // RM 1.1
+            return CCI_RVRGroundColorSensor::SReading();
+        };
 
-        // virtual Real GetGroundReading()
-        // { // RM 1.2
-        //     return 0.0f;
-        // };
+        virtual CColor GetGroundReading()
+        { // RM 1.2
+            return CColor();
+        };
 
         /*
          * Setter for the ground input.
          */
-        // virtual void SetGroundInput(CCI_EPuckGroundSensor::SReadings s_ground_input){};
+        virtual void SetGroundInput(CCI_RVRGroundColorSensor::SReading s_ground_input){};
 
         /*
          * Getter for the number of surrounding robots.
@@ -153,11 +168,11 @@ namespace argos
         /*
          * Getter for the message to send.
          */
-        virtual const UInt8 GetMessageToSend() const
-        {
-            UInt8 unEmptyVariable = 0;
-            return unEmptyVariable;
-        };
+        // virtual const UInt8 GetMessageToSend() const
+        // {
+        //     UInt8 unEmptyVariable = 0;
+        //     return unEmptyVariable;
+        // };
 
         /*
          * Getter for the number of messaging neighbors
@@ -169,46 +184,41 @@ namespace argos
         // };
 
         /*
-         * Getter for attraction force to the neighbors computed with RaB messages
+         * Getter for attraction force to the neighbors computed with lidar information
          */
-        // virtual CCI_EPuckRangeAndBearingSensor::SReceivedPacket GetAttractionVectorToNeighbors(Real f_alpha_parameter)
-        // { // RM 1.2
-        //     return CCI_EPuckRangeAndBearingSensor::SReceivedPacket();
-        // };
+        virtual CCI_RVRLidarSensor::SReading GetAttractionVectorToNeighbors(Real f_alpha_parameter)
+        { // RM 1.2
+            return CCI_RVRLidarSensor::SReading();
+        };
 
         /*
-         * Getter for the vector representing the attraction force to the neighbors that are sending a message computed with RaB messages
+         * Getter for the vector representing the attraction force to the neighbors that are sending a message computed with lidar information
          */
-        // virtual CCI_EPuckRangeAndBearingSensor::SReceivedPacket GetAttractionVectorToMessagingNeighbors(Real f_alpha_parameter, UInt8 un_message)
-        // { // RM2.0
-        //     return CCI_EPuckRangeAndBearingSensor::SReceivedPacket();
-        // };
+        virtual CCI_RVRLidarSensor::SReading GetAttractionVectorToDetectedNeighbors(Real f_alpha_parameter, UInt8 un_message)
+        { // RM2.0
+            return CCI_RVRLidarSensor::SReading();
+        };
 
         /*
-         * Getter for the center of mass of neighbors computed with RaB messages
+         * Getter for the center of mass of neighbors computed with lidar information
          */
-        // virtual CCI_EPuckRangeAndBearingSensor::SReceivedPacket GetNeighborsCenterOfMass()
-        // {
-        //     return CCI_EPuckRangeAndBearingSensor::SReceivedPacket();
-        // };
+        virtual CCI_RVRLidarSensor::SReading GetNeighborsCenterOfMass()
+        {
+            return CCI_RVRLidarSensor::SReading();
+        };
 
         /*
-         * Getter for the center of mass of messaging neighbors computed with RaB messages
+         * Getter for the center of mass of detected neighbors computed with lidar information
          */
-        // virtual CCI_EPuckRangeAndBearingSensor::SReceivedPacket GetMessagingNeighborsCenterOfMass(UInt8 un_message)
-        // {
-        //     return CCI_EPuckRangeAndBearingSensor::SReceivedPacket();
-        // };
+        virtual CCI_RVRLidarSensor::SReading GetDetectedNeighborsCenterOfMass(UInt8 un_message)
+        {
+            return CCI_RVRLidarSensor::SReading();
+        };
 
         /*
          * Setter for the number of surrounding robots.
          */
-        // virtual void SetNumberNeighbors(const UInt8 &un_number_neighbors){};
-
-        /*
-         * Setter for the range-and-bearing input.
-         */
-        // virtual void SetRangeAndBearingMessages(CCI_EPuckRangeAndBearingSensor::TPackets s_packets){};
+        virtual void SetNumberNeighbors(const UInt8 &un_number_neighbors){};
 
         /*
          * Setter for the message to send with range and bearing

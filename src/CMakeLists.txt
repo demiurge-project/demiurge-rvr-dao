@@ -7,7 +7,7 @@ if(ARGOS_BUILD_FOR_SIMULATOR)
 	set(HEADERS
 		RVRDAO.h
 	# 	RabMessageBuffer.h
-	#   ReferenceModel1Dot1.h
+	  	ReferenceModel1Dot1.h
 	#   ReferenceModel1Dot2.h
 	#   ReferenceModel2Dot0.h
 	#   ReferenceModel2Dot1.h
@@ -19,7 +19,7 @@ if(ARGOS_BUILD_FOR_SIMULATOR)
 	set(SOURCES
 		RVRDAO.cpp
 	# 	RabMessageBuffer.cpp
-	#   ReferenceModel1Dot1.cpp
+	  	ReferenceModel1Dot1.cpp
 	#   ReferenceModel1Dot2.cpp
 	#   ReferenceModel2Dot0.cpp
 	#   ReferenceModel2Dot1.cpp
