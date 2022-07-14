@@ -29,6 +29,11 @@ public:
     CCI_RVRProximitySensor::TReadings GetProximityInput() const;
 
     /*
+     * Getter for the proximity reading.
+     */
+    CCI_RVRProximitySensor::SReading GetProximityReading();
+
+    /*
      * Setter for the proximity input.
      */
     void SetProximityInput(CCI_RVRProximitySensor::TReadings s_prox_input);
@@ -57,6 +62,11 @@ public:
      * Getter for the ground input.
      */
     CCI_RVRGroundColorSensor::SReading GetGroundInput();
+
+    /*
+     * Getter for the ground reading
+     */
+    CColor GetGroundReading();
 
     /*
      * Setter for the ground input.

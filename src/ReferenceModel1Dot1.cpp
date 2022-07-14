@@ -30,6 +30,21 @@ void ReferenceModel1Dot1::Reset()
 /****************************************/
 /****************************************/
 
+CCI_RVRProximitySensor::SReading ReferenceModel1Dot1::GetProximityReading()
+{
+    CCI_RVRProximitySensor::SReading cOutputReading;
+    CVector2 cSumProxi(0, CRadians::ZERO);
+    for (UInt8 i = 0; i < m_sProximityInput.size(); i++)
+    {
+        cSumProxi += CVector2(m_sProximityInput[i].Value, m_sProximityInput[i].Angle.SignedNormalize());
+    }
+
+    cOutputReading.Value = (cSumProxi.Length() > 1) ? 1 : cSumProxi.Length();
+    cOutputReading.Angle = cSumProxi.Angle().SignedNormalize();
+
+    return cOutputReading;
+}
+
 CCI_RVRProximitySensor::TReadings ReferenceModel1Dot1::GetProximityInput() const
 {
     return m_sProximityInput;
