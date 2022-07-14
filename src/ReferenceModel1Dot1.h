@@ -54,6 +54,11 @@ public:
     CCI_RVRLightSensor::SReading GetLightInput() const;
 
     /*
+     * Getter for the light reading.
+     */
+    CCI_RVRLightSensor::SReading GetLightReading();
+
+    /*
      * Setter for the light input.
      */
     void SetLightInput(CCI_RVRLightSensor::SReading s_light_input);

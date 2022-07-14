@@ -69,6 +69,14 @@ CCI_RVRLightSensor::SReading ReferenceModel1Dot1::GetLightInput() const
 /****************************************/
 /****************************************/
 
+CCI_RVRLightSensor::SReading ReferenceModel1Dot1::GetLightReading()
+{
+    return m_sLightInput;
+}
+
+/****************************************/
+/****************************************/
+
 void ReferenceModel1Dot1::SetLightInput(CCI_RVRLightSensor::SReading s_light_input)
 {
     m_sLightInput = s_light_input;
