@@ -103,7 +103,7 @@ void ReferenceModel1Dot1::SetGroundInput(CCI_RVRGroundColorSensor::SReading s_gr
 
 const UInt8 ReferenceModel1Dot1::GetNumberNeighbors() const
 {
-    return m_unNumberNeighbors;
+    return LidarToRobotPositions(m_sLidarInput).size();
 }
 
 /****************************************/
@@ -133,8 +133,7 @@ void ReferenceModel1Dot1::SetLidarInput(CCI_RVRLidarSensor::TReadings s_lidar_in
 /****************************************/
 /****************************************/
 
-/* Utility function to turn the lidar readings into robot positions */
-std::vector<CCI_RVRLidarSensor::SReading> LidarToRobotPositions(CCI_RVRLidarSensor::TReadings s_lidar_input)
+std::vector<CCI_RVRLidarSensor::SReading> ReferenceModel1Dot1::LidarToRobotPositions(CCI_RVRLidarSensor::TReadings s_lidar_input) const
 {
     // identify groups of points which are the robots
     UInt8 n_neigh = -1;

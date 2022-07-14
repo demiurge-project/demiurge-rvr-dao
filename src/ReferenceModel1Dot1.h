@@ -123,6 +123,9 @@ private:
      * The number of surrounding robots.
      */
     UInt8 m_unNumberNeighbors;
+
+    /* Utility function to turn the lidar readings into robot positions */
+    std::vector<CCI_RVRLidarSensor::SReading> LidarToRobotPositions(CCI_RVRLidarSensor::TReadings s_lidar_input) const;
 };
 
 #endif
