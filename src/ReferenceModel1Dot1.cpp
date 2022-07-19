@@ -90,6 +90,11 @@ CCI_RVRGroundColorSensor::SReading ReferenceModel1Dot1::GetGroundInput()
     return m_sGroundInput;
 }
 
+CColor ReferenceModel1Dot1::GetGroundReading()
+{
+    return m_sGroundInput.Color;
+}
+
 /****************************************/
 /****************************************/
 
