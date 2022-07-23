@@ -106,7 +106,7 @@ void ReferenceModel1Dot2::SetGroundInput(CCI_RVRGroundColorSensor::SReading s_gr
 /****************************************/
 /****************************************/
 
-void ReferenceModel1Dot2::SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList s_omni_input)
+void ReferenceModel1Dot2::SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings s_omni_input)
 {
     m_sOmnidirectionalCameraInput = s_omni_input;
 }
@@ -114,7 +114,7 @@ void ReferenceModel1Dot2::SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirec
 /****************************************/
 /****************************************/
 
-CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList ReferenceModel1Dot2::GetOmnidirectionalCameraInput() const
+CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings ReferenceModel1Dot2::GetOmnidirectionalCameraInput() const
 {
     return m_sOmnidirectionalCameraInput;
 }
@@ -124,7 +124,7 @@ CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList ReferenceModel1Dot2::GetOm
 
 const UInt8 ReferenceModel1Dot2::GetNumberNeighbors() const
 {
-    return m_sOmnidirectionalCameraInput.size();
+    return m_sOmnidirectionalCameraInput.BlobList.size();
 }
 
 /****************************************/
@@ -156,10 +156,10 @@ void ReferenceModel1Dot2::SetLidarInput(CCI_RVRLidarSensor::TReadings s_lidar_in
 
 CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors(Real f_alpha_parameter)
 {
-    CCI_RVRLidarSensor::TReadings neighbourPositions(m_sOmnidirectionalCameraInput.size());
-    for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.size(); i++)
+    CCI_RVRLidarSensor::TReadings neighbourPositions(m_sOmnidirectionalCameraInput.BlobList.size());
+    for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
     {
-        neighbourPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput[i]->Distance, m_sOmnidirectionalCameraInput[i]->Angle);
+        neighbourPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput.BlobList[i]->Distance, m_sOmnidirectionalCameraInput.BlobList[i]->Angle);
     }
     // we now have the position of each neighbour
     // we can compute the attraction vector
@@ -180,10 +180,10 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors
 
 CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetNeighborsCenterOfMass()
 {
-    CCI_RVRLidarSensor::TReadings neighbourPositions(m_sOmnidirectionalCameraInput.size());
-    for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.size(); i++)
+    CCI_RVRLidarSensor::TReadings neighbourPositions(m_sOmnidirectionalCameraInput.BlobList.size());
+    for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
     {
-        neighbourPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput[i]->Distance, m_sOmnidirectionalCameraInput[i]->Angle);
+        neighbourPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput.BlobList[i]->Distance, m_sOmnidirectionalCameraInput.BlobList[i]->Angle);
     }
     // we now have the position of each neighbour
     // we can compute the attraction vector

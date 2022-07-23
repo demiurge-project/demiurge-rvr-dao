@@ -81,12 +81,12 @@ public:
     /*
      * Getter for the omnidirectional camera input.
      */
-    CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList GetOmnidirectionalCameraInput() const;
+    CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings GetOmnidirectionalCameraInput() const;
 
     /*
      * Setter for the omnidirectional camera input.
      */
-    void SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList s_omnidirectional_camera_input);
+    void SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings s_omnidirectional_camera_input);
 
     /*
      * Getter for the number of surrounding robots.
@@ -132,15 +132,12 @@ private:
     /*
      * The omnidirectional camera input.
      */
-    CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList m_sOmnidirectionalCameraInput;
+    CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings m_sOmnidirectionalCameraInput;
 
     /*
      * The number of surrounding robots.
      */
     UInt8 m_unNumberNeighbors;
-
-    /* Utility function to turn the lidar readings into robot positions */
-    std::vector<CCI_RVRLidarSensor::SReading> LidarToRobotPositions(CCI_RVRLidarSensor::TReadings s_lidar_input) const;
 };
 
 #endif

@@ -71,12 +71,12 @@ public:
     /*
      * Getter for the ground input.
      */
-    CCI_RVRGroundColorSensor::SReading GetGroundInput();
+    CCI_RVRGroundColorSensor::SReading GetGroundInput() const;
 
     /*
      * Getter for the ground reading
      */
-    CColor GetGroundReading();
+    CColor GetGroundReading() const;
 
     /*
      * Setter for the ground input.

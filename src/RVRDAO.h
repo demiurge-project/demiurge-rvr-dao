@@ -142,12 +142,12 @@ namespace argos
         /*
          * Getter for the ground input.
          */
-        virtual CCI_RVRGroundColorSensor::SReading GetGroundInput()
+        virtual CCI_RVRGroundColorSensor::SReading GetGroundInput() const
         { // RM 1.1
             return CCI_RVRGroundColorSensor::SReading();
         };
 
-        virtual CColor GetGroundReading()
+        virtual CColor GetGroundReading() const
         { // RM 1.2
             return CColor();
         };
@@ -160,16 +160,16 @@ namespace argos
         /**
          * Getter for the omnidirectional camera input.
          */
-        virtual CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList GetOmnidirectionalCameraInput()
+        virtual CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings GetOmnidirectionalCameraInput() const
         {
-            CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList emptyList;
+            CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings emptyList;
             return emptyList;
         }
 
         /**
          * Setter for the omnidirectional camera input.
          */
-        virtual void SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList s_omni_camera_input){};
+        virtual void SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings s_omni_camera_input){};
 
         /*
          * Getter for the number of surrounding robots.
