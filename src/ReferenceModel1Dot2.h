@@ -81,7 +81,7 @@ public:
     /*
      * Getter for the omnidirectional camera input.
      */
-    CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList GetOmnidirectionalCameraInput();
+    CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList GetOmnidirectionalCameraInput() const;
 
     /*
      * Setter for the omnidirectional camera input.
@@ -128,6 +128,11 @@ private:
      * The lidar input.
      */
     CCI_RVRLidarSensor::TReadings m_sLidarInput;
+
+    /*
+     * The omnidirectional camera input.
+     */
+    CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList m_sOmnidirectionalCameraInput;
 
     /*
      * The number of surrounding robots.

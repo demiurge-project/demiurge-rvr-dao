@@ -5,7 +5,7 @@
 /****************************************/
 /****************************************/
 
-ReferenceModel1Dot1::ReferenceModel1Dot1()
+ReferenceModel1Dot2::ReferenceModel1Dot2()
 {
     m_pcRng = CRandom::CreateRNG("argos");
     m_fMaxVelocity = 155.5; // 1.555 m/s
@@ -16,12 +16,12 @@ ReferenceModel1Dot1::ReferenceModel1Dot1()
 /****************************************/
 /****************************************/
 
-ReferenceModel1Dot1::~ReferenceModel1Dot1() {}
+ReferenceModel1Dot2::~ReferenceModel1Dot2() {}
 
 /****************************************/
 /****************************************/
 
-void ReferenceModel1Dot1::Reset()
+void ReferenceModel1Dot2::Reset()
 {
     m_fLeftWheelVelocity = 0;
     m_fRightWheelVelocity = 0;
@@ -30,7 +30,7 @@ void ReferenceModel1Dot1::Reset()
 /****************************************/
 /****************************************/
 
-CCI_RVRProximitySensor::SReading ReferenceModel1Dot1::GetProximityReading()
+CCI_RVRProximitySensor::SReading ReferenceModel1Dot2::GetProximityReading()
 {
     CCI_RVRProximitySensor::SReading cOutputReading;
     CVector2 cSumProxi(0, CRadians::ZERO);
@@ -45,7 +45,7 @@ CCI_RVRProximitySensor::SReading ReferenceModel1Dot1::GetProximityReading()
     return cOutputReading;
 }
 
-CCI_RVRProximitySensor::TReadings ReferenceModel1Dot1::GetProximityInput() const
+CCI_RVRProximitySensor::TReadings ReferenceModel1Dot2::GetProximityInput() const
 {
     return m_sProximityInput;
 }
@@ -53,7 +53,7 @@ CCI_RVRProximitySensor::TReadings ReferenceModel1Dot1::GetProximityInput() const
 /****************************************/
 /****************************************/
 
-void ReferenceModel1Dot1::SetProximityInput(CCI_RVRProximitySensor::TReadings s_prox_input)
+void ReferenceModel1Dot2::SetProximityInput(CCI_RVRProximitySensor::TReadings s_prox_input)
 {
     m_sProximityInput = s_prox_input;
 }
@@ -61,7 +61,7 @@ void ReferenceModel1Dot1::SetProximityInput(CCI_RVRProximitySensor::TReadings s_
 /****************************************/
 /****************************************/
 
-CCI_RVRLightSensor::SReading ReferenceModel1Dot1::GetLightInput() const
+CCI_RVRLightSensor::SReading ReferenceModel1Dot2::GetLightInput() const
 {
     return m_sLightInput;
 }
@@ -69,7 +69,7 @@ CCI_RVRLightSensor::SReading ReferenceModel1Dot1::GetLightInput() const
 /****************************************/
 /****************************************/
 
-CCI_RVRLightSensor::SReading ReferenceModel1Dot1::GetLightReading()
+CCI_RVRLightSensor::SReading ReferenceModel1Dot2::GetLightReading()
 {
     return m_sLightInput;
 }
@@ -77,7 +77,7 @@ CCI_RVRLightSensor::SReading ReferenceModel1Dot1::GetLightReading()
 /****************************************/
 /****************************************/
 
-void ReferenceModel1Dot1::SetLightInput(CCI_RVRLightSensor::SReading s_light_input)
+void ReferenceModel1Dot2::SetLightInput(CCI_RVRLightSensor::SReading s_light_input)
 {
     m_sLightInput = s_light_input;
 }
@@ -85,12 +85,12 @@ void ReferenceModel1Dot1::SetLightInput(CCI_RVRLightSensor::SReading s_light_inp
 /****************************************/
 /****************************************/
 
-CCI_RVRGroundColorSensor::SReading ReferenceModel1Dot1::GetGroundInput()
+CCI_RVRGroundColorSensor::SReading ReferenceModel1Dot2::GetGroundInput()
 {
     return m_sGroundInput;
 }
 
-CColor ReferenceModel1Dot1::GetGroundReading()
+CColor ReferenceModel1Dot2::GetGroundReading()
 {
     return m_sGroundInput.Color;
 }
@@ -98,7 +98,7 @@ CColor ReferenceModel1Dot1::GetGroundReading()
 /****************************************/
 /****************************************/
 
-void ReferenceModel1Dot1::SetGroundInput(CCI_RVRGroundColorSensor::SReading s_ground_input)
+void ReferenceModel1Dot2::SetGroundInput(CCI_RVRGroundColorSensor::SReading s_ground_input)
 {
     m_sGroundInput = s_ground_input;
 }
@@ -106,15 +106,31 @@ void ReferenceModel1Dot1::SetGroundInput(CCI_RVRGroundColorSensor::SReading s_gr
 /****************************************/
 /****************************************/
 
-const UInt8 ReferenceModel1Dot1::GetNumberNeighbors() const
+void ReferenceModel1Dot2::SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList s_omni_input)
 {
-    return LidarToRobotPositions(m_sLidarInput).size();
+    m_sOmnidirectionalCameraInput = s_omni_input;
 }
 
 /****************************************/
 /****************************************/
 
-void ReferenceModel1Dot1::SetNumberNeighbors(const UInt8 &un_number_neighbors)
+CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList ReferenceModel1Dot2::GetOmnidirectionalCameraInput() const
+{
+    return m_sOmnidirectionalCameraInput;
+}
+
+/****************************************/
+/****************************************/
+
+const UInt8 ReferenceModel1Dot2::GetNumberNeighbors() const
+{
+    return m_sOmnidirectionalCameraInput.size();
+}
+
+/****************************************/
+/****************************************/
+
+void ReferenceModel1Dot2::SetNumberNeighbors(const UInt8 &un_number_neighbors)
 {
     m_unNumberNeighbors = un_number_neighbors;
 }
@@ -122,7 +138,7 @@ void ReferenceModel1Dot1::SetNumberNeighbors(const UInt8 &un_number_neighbors)
 /****************************************/
 /****************************************/
 
-CCI_RVRLidarSensor::TReadings ReferenceModel1Dot1::GetLidarInput() const
+CCI_RVRLidarSensor::TReadings ReferenceModel1Dot2::GetLidarInput() const
 {
     return m_sLidarInput;
 }
@@ -130,7 +146,7 @@ CCI_RVRLidarSensor::TReadings ReferenceModel1Dot1::GetLidarInput() const
 /****************************************/
 /****************************************/
 
-void ReferenceModel1Dot1::SetLidarInput(CCI_RVRLidarSensor::TReadings s_lidar_input)
+void ReferenceModel1Dot2::SetLidarInput(CCI_RVRLidarSensor::TReadings s_lidar_input)
 {
     m_sLidarInput = s_lidar_input;
 }
@@ -138,82 +154,13 @@ void ReferenceModel1Dot1::SetLidarInput(CCI_RVRLidarSensor::TReadings s_lidar_in
 /****************************************/
 /****************************************/
 
-std::vector<CCI_RVRLidarSensor::SReading> ReferenceModel1Dot1::LidarToRobotPositions(CCI_RVRLidarSensor::TReadings s_lidar_input) const
+CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors(Real f_alpha_parameter)
 {
-    // identify groups of points which are the robots
-    UInt8 n_neigh = -1;
-    // array of neighbours id which identifies uniquely a given robot
-    // vector of same length as lidar input and with flag -1 to mean "no robot at this angle"
-    std::vector<int> neighbourId(s_lidar_input.size(), -1);
-    // stores the previous index identified as a robot
-    UInt16 latestRobotIndex;
-    for (std::size_t i = 0; i != s_lidar_input.size(); ++i)
+    CCI_RVRLidarSensor::TReadings neighbourPositions(m_sOmnidirectionalCameraInput.size());
+    for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.size(); i++)
     {
-        if (s_lidar_input[i].Value > 0.75 || s_lidar_input[i].Value < 0.10)
-        {
-            // we consider it is not a robot beyond 75cm or if the reading is too close to the sensor
-            continue;
-        }
-        // the point belongs to a robot
-
-        // first robot point belongs to the first robot
-        if (n_neigh == -1)
-        {
-            // belongs to neighbour 0
-            neighbourId[i] = ++n_neigh;
-            latestRobotIndex = i;
-            continue;
-        }
-
-        // ulterior point
-        // if the 2 points have a difference of
-        // less than 10 cm in distance to current robot and
-        // less than 10 degrees (0.175) in angle then they belong to the same robot
-        if (Abs(s_lidar_input[i].Value - s_lidar_input[latestRobotIndex].Value) < 0.1 && Abs(s_lidar_input[i].Angle - s_lidar_input[latestRobotIndex].Angle) < CRadians(0.175))
-        {
-            neighbourId[i] = n_neigh;
-            latestRobotIndex = i;
-            continue;
-        }
-
-        // new group of points
-        neighbourId[i] = ++n_neigh;
-        latestRobotIndex = i;
+        neighbourPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput[i]->Distance, m_sOmnidirectionalCameraInput[i]->Angle);
     }
-
-    // now we have the value of the group/robot each point belongs to,
-    // -1 being no group = not a robot
-
-    // each group will be represented by the average (Value, Angle) over the group
-    std::vector<CCI_RVRLidarSensor::SReading> neighbourPositions;
-    // group ids go from 0 to n_neigh => n_neigh +1 groups
-    neighbourPositions.resize(n_neigh + 1);
-    for (int i = 0; i <= n_neigh; ++i)
-    {
-        // all the positions for this particular group i
-        std::vector<CCI_RVRLidarSensor::SReading> groupPositions;
-        for (size_t j = 0; j < s_lidar_input.size(); j++)
-        {
-            if (neighbourId[j] == i)
-            {
-                groupPositions.push_back(s_lidar_input[j]);
-            }
-        }
-        // compute mean
-        std::vector<Real> groupSum(2, 0.0f);
-        for (const auto &groupMember : groupPositions)
-        {
-            groupSum[0] += groupMember.Value;
-            groupSum[1] += groupMember.Angle.GetValue();
-        }
-        neighbourPositions[i] = CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size()));
-    }
-    return neighbourPositions;
-}
-
-CCI_RVRLidarSensor::SReading ReferenceModel1Dot1::GetAttractionVectorToNeighbors(Real f_alpha_parameter)
-{
-    auto neighbourPositions = LidarToRobotPositions(m_sLidarInput);
     // we now have the position of each neighbour
     // we can compute the attraction vector
     CVector2 lidarVectorSum(0, CRadians::ZERO);
@@ -231,9 +178,13 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot1::GetAttractionVectorToNeighbors
 /****************************************/
 /****************************************/
 
-CCI_RVRLidarSensor::SReading ReferenceModel1Dot1::GetNeighborsCenterOfMass()
+CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetNeighborsCenterOfMass()
 {
-    auto neighbourPositions = LidarToRobotPositions(m_sLidarInput);
+    CCI_RVRLidarSensor::TReadings neighbourPositions(m_sOmnidirectionalCameraInput.size());
+    for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.size(); i++)
+    {
+        neighbourPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput[i]->Distance, m_sOmnidirectionalCameraInput[i]->Angle);
+    }
     // we now have the position of each neighbour
     // we can compute the attraction vector
     CVector2 lidarVectorSum(0, CRadians::ZERO);
