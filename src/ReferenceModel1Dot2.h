@@ -3,25 +3,20 @@
 
 #include "RVRDAO.h"
 
-/**
- * This reference model actively uses the lidar sensor to extrapolate the
- * position and number of neighbours.
- */
-
 using namespace argos;
 
-class ReferenceModel1Dot1 : public RVRDAO
+class ReferenceModel1Dot2 : public RVRDAO
 {
 public:
     /*
      *  Class constructor.
      */
-    ReferenceModel1Dot1();
+    ReferenceModel1Dot2();
 
     /*
      * Class destructor.
      */
-    virtual ~ReferenceModel1Dot1();
+    virtual ~ReferenceModel1Dot2();
 
     /*
      * Reset function.
@@ -82,6 +77,16 @@ public:
      * Setter for the ground input.
      */
     void SetGroundInput(CCI_RVRGroundColorSensor::SReading s_ground_input);
+
+    /*
+     * Getter for the omnidirectional camera input.
+     */
+    CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList GetOmnidirectionalCameraInput();
+
+    /*
+     * Setter for the omnidirectional camera input.
+     */
+    void SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList s_omnidirectional_camera_input);
 
     /*
      * Getter for the number of surrounding robots.

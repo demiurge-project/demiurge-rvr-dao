@@ -37,6 +37,7 @@
 #include <argos3/plugins/robots/rvr/control_interface/ci_rvr_light_sensor.h>
 #include <argos3/plugins/robots/rvr/control_interface/ci_rvr_ground_color_sensor.h>
 #include <argos3/plugins/robots/rvr/control_interface/ci_rvr_lidar_sensor.h>
+#include <argos3/plugins/robots/generic/control_interface/ci_colored_blob_omnidirectional_camera_sensor.h>
 
 namespace argos
 {
@@ -156,6 +157,20 @@ namespace argos
          */
         virtual void SetGroundInput(CCI_RVRGroundColorSensor::SReading s_ground_input){};
 
+        /**
+         * Getter for the omnidirectional camera input.
+         */
+        virtual CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList GetOmnidirectionalCameraInput()
+        {
+            CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList emptyList;
+            return emptyList;
+        }
+
+        /**
+         * Setter for the omnidirectional camera input.
+         */
+        virtual void SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::TBlobList s_omni_camera_input){};
+
         /*
          * Getter for the number of surrounding robots.
          */
@@ -164,24 +179,6 @@ namespace argos
             UInt8 unEmptyVariable = 0;
             return unEmptyVariable;
         };
-
-        /*
-         * Getter for the message to send.
-         */
-        // virtual const UInt8 GetMessageToSend() const
-        // {
-        //     UInt8 unEmptyVariable = 0;
-        //     return unEmptyVariable;
-        // };
-
-        /*
-         * Getter for the number of messaging neighbors
-         */
-        // virtual UInt8 GetNumberMessagingNeighbors(UInt8 un_message)
-        // {
-        //     UInt8 unEmptyVariable = 0;
-        //     return unEmptyVariable;
-        // };
 
         /*
          * Getter for attraction force to the neighbors computed with lidar information
