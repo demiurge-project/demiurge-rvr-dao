@@ -8,7 +8,7 @@
 ReferenceModel1Dot1::ReferenceModel1Dot1()
 {
     m_pcRng = CRandom::CreateRNG("argos");
-    m_fMaxVelocity = 155.5; // 1.555 m/s
+    m_fMaxVelocity = 12; // 12 cm/s (real max speed is 155 cm/s but it is used as is by automode)
     m_fLeftWheelVelocity = 0;
     m_fRightWheelVelocity = 0;
 }
