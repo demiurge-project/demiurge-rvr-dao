@@ -36,12 +36,13 @@ CCI_RVRProximitySensor::SReading ReferenceModel1Dot2::GetProximityReading()
     CVector2 cSumProxi(0, CRadians::ZERO);
     for (UInt8 i = 0; i < m_sProximityInput.size(); i++)
     {
-        cSumProxi += CVector2(m_sProximityInput[i].Value, m_sProximityInput[i].Angle.SignedNormalize());
+        // abs(1-x) to map [0,1] to [1,0]
+        cSumProxi += CVector2(Abs(1.0f - m_sProximityInput[i].Value), m_sProximityInput[i].Angle.SignedNormalize());
     }
 
     cOutputReading.Value = (cSumProxi.Length() > 1) ? 1 : cSumProxi.Length();
     cOutputReading.Angle = cSumProxi.Angle().SignedNormalize();
-
+    std::cout << "Proximity reading: " << cOutputReading.Value << " " << cOutputReading.Angle << std::endl;
     return cOutputReading;
 }
 
