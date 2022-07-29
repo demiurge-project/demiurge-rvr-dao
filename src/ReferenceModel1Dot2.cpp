@@ -42,7 +42,6 @@ CCI_RVRProximitySensor::SReading ReferenceModel1Dot2::GetProximityReading()
 
     cOutputReading.Value = (cSumProxi.Length() > 1) ? 1 : cSumProxi.Length();
     cOutputReading.Angle = cSumProxi.Angle().SignedNormalize();
-    std::cout << "Proximity reading: " << cOutputReading.Value << " " << cOutputReading.Angle << std::endl;
     return cOutputReading;
 }
 
