@@ -85,12 +85,12 @@ void ReferenceModel1Dot2::SetLightInput(CCI_RVRLightSensor::SReading s_light_inp
 /****************************************/
 /****************************************/
 
-CCI_RVRGroundColorSensor::SReading ReferenceModel1Dot2::GetGroundInput()
+CCI_RVRGroundColorSensor::SReading ReferenceModel1Dot2::GetGroundInput() const
 {
     return m_sGroundInput;
 }
 
-CColor ReferenceModel1Dot2::GetGroundReading()
+CColor ReferenceModel1Dot2::GetGroundReading() const
 {
     return m_sGroundInput.Color;
 }
