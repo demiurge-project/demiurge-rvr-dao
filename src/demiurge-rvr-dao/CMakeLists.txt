@@ -112,7 +112,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   #INCLUDE_DIRS include
-  LIBRARIES foraging
+  LIBRARIES rvr_reference_model
   CATKIN_DEPENDS geometry_msgs nav_msgs roscpp rospy std_msgs tf teraranger_array message_runtime
   DEPENDS system_lib
 )
