@@ -33,5 +33,6 @@
 
 build/
 devel/
+install/
 .vscode/
 .idea/
