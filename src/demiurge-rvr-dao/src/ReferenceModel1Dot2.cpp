@@ -11,6 +11,7 @@ ReferenceModel1Dot2::ReferenceModel1Dot2()
     m_fMaxVelocity = 12; // 12 cm/s (real max speed is 155 cm/s but it is used as is by automode)
     m_fLeftWheelVelocity = 0;
     m_fRightWheelVelocity = 0;
+    InitROS();
 }
 
 /****************************************/
@@ -198,4 +199,114 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetNeighborsCenterOfMass()
     cLidarReading.Angle = lidarVectorSum.Angle().SignedNormalize();
 
     return cLidarReading;
+}
+
+void ReferenceModel1Dot2::SetWheelsVelocity(const Real &un_left_velocity, const Real &un_right_velocity)
+{
+    m_fLeftWheelVelocity = un_left_velocity;
+    m_fRightWheelVelocity = un_right_velocity;
+    PublishVelocity();
+}
+
+void ReferenceModel1Dot2::SetWheelsVelocity(const CVector2 &c_velocity_vector)
+{
+    m_fLeftWheelVelocity = c_velocity_vector.GetX();
+    m_fRightWheelVelocity = c_velocity_vector.GetY();
+    PublishVelocity();
+}
+
+/****************************************/
+/****************************************/
+
+void ReferenceModel1Dot2::InitROS()
+{
+    std::stringstream name;
+    name.str("");
+    name << "rvr" << m_unRobotIdentifier;
+
+    if (!ros::isInitialized())
+    {
+        char **argv = NULL;
+        int argc = 0;
+        ros::init(argc, argv, name.str());
+    }
+    std::stringstream ss;
+    ros::NodeHandle rosNode;
+
+    // setup color sensor subscriber
+    color_sensor_sub = rosNode.subscribe("/rvr/ground_color", 10, &ReferenceModel1Dot2::ColorHandler, this);
+    // setup IMU subscriber
+    // imu_subscriber = rosNode.subscribe("/rvr/imu", 10, &ReferenceModel1Dot2::ImuHandler, this);
+    // setup light sensor subscriber
+    light_subscriber = rosNode.subscribe("/rvr/ambient_light", 10, &ReferenceModel1Dot2::LightHandler, this);
+    // setup odometry subscriber
+    // odom_subscriber = rosNode.subscribe("/rvr/odom", 10, &ReferenceModel1Dot2::OdometryHandler, this);
+
+    // setup teraranger subscriber
+    prox_sub = rosNode.subscribe("ranges", 10, &ReferenceModel1Dot2::TerarangerHandler, this);
+
+    // setup lidar subscriber
+    lidar_sub = rosNode.subscribe("scan", 10, &ReferenceModel1Dot2::LidarHandler, this);
+
+    // setup velocity publisher
+    vel_pub = rosNode.advertise<std_msgs::Float32MultiArray>("/rvr/wheels_speed", 10, true);
+    // setup velocity messages
+    vel_msg.layout.dim.push_back(std_msgs::MultiArrayDimension());
+    vel_msg.layout.dim[0].size = 2;
+    vel_msg.layout.dim[0].stride = 1;
+    vel_msg.layout.dim[0].label = "wheel_vel";
+    vel_msg.data.clear();
+
+    // setup LED publisher
+    // ss.str("");
+    // ss << "/rvr/rgb_leds";
+    // led_pub = rosNode.advertise<rvr_reference_model::Leds>(ss.str(), 10, true);
+}
+
+/****************************************/
+/****************************************/
+
+void ReferenceModel1Dot2::ColorHandler(const std_msgs::ColorRGBA &msg)
+{
+    m_sGroundInput.Color.SetRed((argos::UInt8)msg.r);
+    m_sGroundInput.Color.SetGreen((argos::UInt8)msg.g);
+    m_sGroundInput.Color.SetBlue((argos::UInt8)msg.b);
+    m_sGroundInput.Color.SetAlpha((argos::UInt8)msg.a);
+}
+
+/****************************************/
+/****************************************/
+
+void ReferenceModel1Dot2::LightHandler(const sensor_msgs::Illuminance &msg)
+{
+    m_sLightInput.Value = msg.illuminance;
+}
+
+/****************************************/
+/****************************************/
+
+void ReferenceModel1Dot2::TerarangerHandler(const teraranger_array::RangeArray &msg)
+{
+    for (short int i = 0; i < 8; ++i)
+    {
+        if (msg.ranges[i].range <= 0.3)
+            m_sProximityInput[i].Value = Exp(-msg.ranges[i].range);
+        else
+            m_sProximityInput[i].Value = 0;
+        CRange<Real>(0.0f, 1.0f).TruncValue(m_sProximityInput[i].Value);
+    }
+}
+
+void ReferenceModel1Dot2::LidarHandler(const sensor_msgs::LaserScan &msg)
+{
+    for (short int i = 0; i < 719; ++i)
+        m_sLidarInput[i].Value = msg.ranges[i];
+}
+
+void ReferenceModel1Dot2::PublishVelocity()
+{
+    vel_msg.data.clear();
+    vel_msg.data.push_back(round(m_fLeftWheelVelocity / 100)); // convert cm/s to m/s
+    vel_msg.data.push_back(round(m_fLeftWheelVelocity / 100));
+    vel_pub.publish(vel_msg);
 }

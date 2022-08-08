@@ -54,12 +54,12 @@ namespace argos
         /*
          * Setter for the wheels velocity.
          */
-        void SetWheelsVelocity(const Real &un_left_velocity, const Real &un_right_velocity);
+        virtual void SetWheelsVelocity(const Real &un_left_velocity, const Real &un_right_velocity);
 
         /*
          * Setter for the wheels velocity.
          */
-        void SetWheelsVelocity(const CVector2 &c_velocity_vector);
+        virtual void SetWheelsVelocity(const CVector2 &c_velocity_vector);
 
         /*
          * Getter for the right wheel velocity.

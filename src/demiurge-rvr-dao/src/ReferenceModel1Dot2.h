@@ -2,6 +2,23 @@
 #define REFERENCE_MODEL_1_1_H
 
 #include "RVRDAO.h"
+#include "ros/ros.h"
+
+#include <tf/transform_broadcaster.h>
+#include <std_msgs/ColorRGBA.h>
+#include <std_msgs/Float32MultiArray.h>
+#include <geometry_msgs/Twist.h>
+#include <nav_msgs/Odometry.h>
+#include <rvr_reference_model/Leds.h>
+#include <sensor_msgs/Imu.h>
+#include <sensor_msgs/Illuminance.h>
+
+// terabee
+#include "teraranger_array/RangeArray.h"
+#include "sensor_msgs/Range.h"
+
+// lidar
+#include "sensor_msgs/LaserScan.h"
 
 using namespace argos;
 
@@ -108,6 +125,16 @@ public:
      */
     CCI_RVRLidarSensor::SReading GetNeighborsCenterOfMass();
 
+    /*
+     * Setter for the wheels velocity.
+     */
+    void SetWheelsVelocity(const Real &un_left_velocity, const Real &un_right_velocity);
+
+    /*
+     * Setter for the wheels velocity.
+     */
+    void SetWheelsVelocity(const CVector2 &c_velocity_vector);
+
 private:
     /*
      * The proximity sensors input.
@@ -138,6 +165,58 @@ private:
      * The number of surrounding robots.
      */
     UInt8 m_unNumberNeighbors;
+
+private:
+    /*
+    Initializes ROS.
+    */
+    void InitROS();
+
+    /* Handler for the ground color sensor data from RVR driver */
+    virtual void ColorHandler(const std_msgs::ColorRGBA &msg);
+
+    /* Handler for the IMU message from the driver, which contains :
+     * - orientation (from the IMU)
+     * - angular velocity (from the gyroscope)
+     * - linear acceleration (from the accelerometer)
+     */
+    // virtual void ImuHandler(const sensor_msgs::Imu &msg);
+
+    /* Handler for the ambient light */
+    virtual void LightHandler(const sensor_msgs::Illuminance &msg);
+
+    /* Handler for odometry */
+    // virtual void OdometryHandler(const nav_msgs::Odometry &msg);
+
+    /* Handler for proximity sensor data */
+    virtual void TerarangerHandler(const teraranger_array::RangeArray &msg);
+
+    /* Handler for lidar Laserscan data */
+    virtual void LidarHandler(const sensor_msgs::LaserScan &msg);
+
+    virtual void PublishVelocity();
+
+    /* Sensors subscribers */
+    ros::Subscriber color_sensor_sub;
+    ros::Subscriber imu_subscriber;
+    ros::Subscriber light_subscriber;
+    ros::Subscriber odom_subscriber;
+
+    /* Proximity sensors subscriber */
+    ros::Subscriber prox_sub;
+
+    /* Lidar subscriber */
+    ros::Subscriber lidar_sub;
+
+    /* Actuators publishers */
+
+    /* Wheel speed publisher */
+    ros::Publisher vel_pub;
+    std_msgs::Float32MultiArray vel_msg;
+
+    /* LED publisher */
+    ros::Publisher led_pub;
+    rvr_reference_model::Leds led_msg;
 };
 
 #endif
