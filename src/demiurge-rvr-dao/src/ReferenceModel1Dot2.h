@@ -1,5 +1,5 @@
-#ifndef REFERENCE_MODEL_1_1_H
-#define REFERENCE_MODEL_1_1_H
+#ifndef REFERENCE_MODEL_1_2_H
+#define REFERENCE_MODEL_1_2_H
 
 #include "RVRDAO.h"
 #include "ros/ros.h"
