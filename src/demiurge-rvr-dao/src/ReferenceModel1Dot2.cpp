@@ -11,7 +11,6 @@ ReferenceModel1Dot2::ReferenceModel1Dot2()
     m_fMaxVelocity = 12; // 12 cm/s (real max speed is 155 cm/s but it is used as is by automode)
     m_fLeftWheelVelocity = 0;
     m_fRightWheelVelocity = 0;
-    InitROS();
 }
 
 /****************************************/

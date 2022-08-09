@@ -166,7 +166,7 @@ private:
      */
     UInt8 m_unNumberNeighbors;
 
-private:
+public:
     /*
     Initializes ROS.
     */
@@ -196,6 +196,7 @@ private:
 
     virtual void PublishVelocity();
 
+private:
     /* Sensors subscribers */
     ros::Subscriber color_sensor_sub;
     ros::Subscriber imu_subscriber;

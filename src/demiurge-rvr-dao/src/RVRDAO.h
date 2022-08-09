@@ -222,6 +222,8 @@ namespace argos
          */
         // virtual void SetRangeAndBearingMessageToSend(UInt8 un_message){};
 
+        virtual void InitROS(){};
+
     protected:
         /*
          * The left wheel velocity (output variable).
