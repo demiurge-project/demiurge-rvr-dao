@@ -223,6 +223,8 @@ void ReferenceModel1Dot2::InitROS()
     name.str("");
     name << "rvr" << m_unRobotIdentifier;
 
+    LOG << name.str() << std::endl;
+
     if (!ros::isInitialized())
     {
         char **argv = NULL;
@@ -271,7 +273,7 @@ void ReferenceModel1Dot2::ColorHandler(const std_msgs::ColorRGBA &msg)
     m_sGroundInput.Color.SetGreen((argos::UInt8)msg.g);
     m_sGroundInput.Color.SetBlue((argos::UInt8)msg.b);
     m_sGroundInput.Color.SetAlpha((argos::UInt8)msg.a);
-    printf("%s\n", m_sGroundInput.Color);
+    LOG << m_sGroundInput.Color << std::endl;
 }
 
 /****************************************/
