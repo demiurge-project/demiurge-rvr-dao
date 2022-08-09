@@ -317,6 +317,6 @@ void ReferenceModel1Dot2::PublishVelocity()
 {
     vel_msg.data.clear();
     vel_msg.data.push_back((m_fLeftWheelVelocity / 100.0f)); // convert cm/s to m/s
-    vel_msg.data.push_back((m_fLeftWheelVelocity / 100.0f));
+    vel_msg.data.push_back((m_fRightWheelVelocity / 100.0f));
     vel_pub.publish(vel_msg);
 }
