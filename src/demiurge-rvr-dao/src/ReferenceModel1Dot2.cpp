@@ -291,7 +291,6 @@ void ReferenceModel1Dot2::LightHandler(const sensor_msgs::Illuminance &msg)
 
 void ReferenceModel1Dot2::TerarangerHandler(const teraranger_array::RangeArray &msg)
 {
-    std::cout << "Message size : " << msg.ranges.size() << std::endl;
     for (size_t i = 0; i < 8; ++i)
     {
         if (msg.ranges[i].range <= 0.4f)
