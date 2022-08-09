@@ -294,12 +294,18 @@ void ReferenceModel1Dot2::TerarangerHandler(const teraranger_array::RangeArray &
     std::cout << "Message size : " << msg.ranges.size() << std::endl;
     for (size_t i = 0; i < 8; ++i)
     {
-        std::cout << "i : " << i << std::endl;
         if (msg.ranges[i].range <= 0.4f)
+        {
+            std::cout << "stg close at index " << i << std::endl;
             m_sProximityInput[i].Value = Exp(-msg.ranges[i].range);
+        }
         else
+        {
+            std::cout << "stg not close at index " << i << std::endl;
             m_sProximityInput[i].Value = 0.0f;
-        CRange<Real>(0.0f, 1.0f).TruncValue(m_sProximityInput[i].Value);
+        }
+
+        // CRange<Real>(0.0f, 1.0f).TruncValue(m_sProximityInput[i].Value);
     }
 }
 
