@@ -297,7 +297,7 @@ void ReferenceModel1Dot2::TerarangerHandler(const teraranger_array::RangeArray &
         if (msg.ranges[i].range <= 0.4f)
         {
             std::cout << "stg close at index " << i << std::endl;
-            // m_sProximityInput[i].Value = Exp(-msg.ranges[i].range);
+            m_sProximityInput.at(i).Value = Exp(-msg.ranges[i].range);
         }
         else
         {
@@ -305,7 +305,7 @@ void ReferenceModel1Dot2::TerarangerHandler(const teraranger_array::RangeArray &
             m_sProximityInput.at(i).Value = 0.0f;
         }
 
-        // CRange<Real>(0.0f, 1.0f).TruncValue(m_sProximityInput[i].Value);
+        CRange<Real>(0.0f, 1.0f).TruncValue(m_sProximityInput.at(i).Value);
     }
 }
 
