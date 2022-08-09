@@ -291,9 +291,9 @@ void ReferenceModel1Dot2::LightHandler(const sensor_msgs::Illuminance &msg)
 
 void ReferenceModel1Dot2::TerarangerHandler(const teraranger_array::RangeArray &msg)
 {
-    std::cout << msg.ranges.size() << std::endl;
     for (short int i = 0; i < 8; ++i)
     {
+        LOG << "i : " << i << std::endl;
         if (msg.ranges[i].range <= 0.4f)
             m_sProximityInput[i].Value = Exp(-msg.ranges[i].range);
         else
