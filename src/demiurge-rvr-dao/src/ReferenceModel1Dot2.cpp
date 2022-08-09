@@ -271,7 +271,7 @@ void ReferenceModel1Dot2::ColorHandler(const std_msgs::ColorRGBA &msg)
     m_sGroundInput.Color.SetGreen((argos::UInt8)msg.g);
     m_sGroundInput.Color.SetBlue((argos::UInt8)msg.b);
     m_sGroundInput.Color.SetAlpha((argos::UInt8)msg.a);
-    std::cout << m_sGroundInput.Color << std::endl;
+    printf("%s\n", m_sGroundInput.Color);
 }
 
 /****************************************/
