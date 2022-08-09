@@ -296,12 +296,10 @@ void ReferenceModel1Dot2::TerarangerHandler(const teraranger_array::RangeArray &
     {
         if (msg.ranges[i].range <= 0.4f)
         {
-            std::cout << "stg close at index " << i << std::endl;
             m_sProximityInput.at(i).Value = Exp(-msg.ranges[i].range);
         }
         else
         {
-            std::cout << "stg not close at index " << i << std::endl;
             m_sProximityInput.at(i).Value = 0.0f;
         }
 
