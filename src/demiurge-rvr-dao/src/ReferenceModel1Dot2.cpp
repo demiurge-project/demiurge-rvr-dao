@@ -305,7 +305,7 @@ void ReferenceModel1Dot2::LidarHandler(const sensor_msgs::LaserScan &msg)
 void ReferenceModel1Dot2::PublishVelocity()
 {
     vel_msg.data.clear();
-    vel_msg.data.push_back(round(m_fLeftWheelVelocity / 100)); // convert cm/s to m/s
-    vel_msg.data.push_back(round(m_fLeftWheelVelocity / 100));
+    vel_msg.data.push_back((m_fLeftWheelVelocity / 100.0f)); // convert cm/s to m/s
+    vel_msg.data.push_back((m_fLeftWheelVelocity / 100.0f));
     vel_pub.publish(vel_msg);
 }
