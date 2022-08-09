@@ -2,6 +2,9 @@
 #include <algorithm>
 #include <numeric>
 
+#include <iostream>
+#include <fstream>
+
 /****************************************/
 /****************************************/
 
@@ -273,7 +276,10 @@ void ReferenceModel1Dot2::ColorHandler(const std_msgs::ColorRGBA &msg)
     m_sGroundInput.Color.SetGreen((argos::UInt8)msg.g);
     m_sGroundInput.Color.SetBlue((argos::UInt8)msg.b);
     m_sGroundInput.Color.SetAlpha((argos::UInt8)msg.a);
-    LOG << m_sGroundInput.Color << std::endl;
+    std::ofstream out;
+    out.open("/tmp/refmodel_logging.txt", std::ios::app);
+    out << m_sGroundInput.Color << std::endl;
+    out.close();
 }
 
 /****************************************/
