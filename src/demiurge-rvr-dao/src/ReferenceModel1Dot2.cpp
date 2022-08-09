@@ -271,6 +271,7 @@ void ReferenceModel1Dot2::ColorHandler(const std_msgs::ColorRGBA &msg)
     m_sGroundInput.Color.SetGreen((argos::UInt8)msg.g);
     m_sGroundInput.Color.SetBlue((argos::UInt8)msg.b);
     m_sGroundInput.Color.SetAlpha((argos::UInt8)msg.a);
+    std::cout << m_sGroundInput.Color << std::endl;
 }
 
 /****************************************/
@@ -288,10 +289,10 @@ void ReferenceModel1Dot2::TerarangerHandler(const teraranger_array::RangeArray &
 {
     for (short int i = 0; i < 8; ++i)
     {
-        if (msg.ranges[i].range <= 0.3)
+        if (msg.ranges[i].range <= 0.4)
             m_sProximityInput[i].Value = Exp(-msg.ranges[i].range);
         else
-            m_sProximityInput[i].Value = 0;
+            m_sProximityInput[i].Value = 0.0f;
         CRange<Real>(0.0f, 1.0f).TruncValue(m_sProximityInput[i].Value);
     }
 }
