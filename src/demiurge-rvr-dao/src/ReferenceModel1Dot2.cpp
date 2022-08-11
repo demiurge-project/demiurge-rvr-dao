@@ -214,7 +214,9 @@ void ReferenceModel1Dot2::FindNeighbours()
         }
         neighbourPositions.at(i) = CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size()));
     }
+    std::cout << m_sOmnidirectionalCameraInput.BlobList.size() << std::endl;
     m_sOmnidirectionalCameraInput.BlobList.resize(neighbourPositions.size());
+    std::cout << m_sOmnidirectionalCameraInput.BlobList.size() << std::endl;
     std::cout << "Spot " << neighbourPositions.size() << " neighbours" << std::endl;
     for (int i = 0; i < neighbourPositions.size(); i++)
     {
