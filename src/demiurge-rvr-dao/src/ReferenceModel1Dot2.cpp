@@ -150,6 +150,7 @@ void ReferenceModel1Dot2::FindNeighbours()
     UInt16 latestRobotIndex;
     for (std::size_t i = 0; i < m_sLidarInput.size(); ++i)
     {
+        std::cout << i << std::endl;
         if (m_sLidarInput[i].Value > 0.75 || m_sLidarInput[i].Value < 0.10)
         {
             // we consider it is not a robot beyond 75cm or if the reading is too close to the sensor
