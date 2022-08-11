@@ -193,7 +193,7 @@ void ReferenceModel1Dot2::FindNeighbours()
     // each group will be represented by the average (Value, Angle) over the group
     std::vector<CCI_RVRLidarSensor::SReading> neighbourPositions;
     // group ids go from 0 to n_neigh => n_neigh +1 groups
-    neighbourPositions.resize(n_neigh + 1);
+    // neighbourPositions.resize(n_neigh + 1);
     for (int i = 0; i <= n_neigh; ++i)
     {
         // all the positions for this particular group i
@@ -205,6 +205,12 @@ void ReferenceModel1Dot2::FindNeighbours()
                 groupPositions.push_back(m_sLidarInput.at(j));
             }
         }
+        if (groupPositions.size() < 5)
+        {
+            // probably noise, ignore it
+            // neighbourPositions.at(i) = CCI_RVRLidarSensor::SReading(0, CRadians::ZERO);
+            continue;
+        }
         // compute mean
         std::vector<Real> groupSum(2, 0.0f);
         for (const auto &groupMember : groupPositions)
@@ -212,7 +218,7 @@ void ReferenceModel1Dot2::FindNeighbours()
             groupSum[0] += groupMember.Value;
             groupSum[1] += groupMember.Angle.GetValue();
         }
-        neighbourPositions.at(i) = CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size()));
+        neighbourPositions.push_back(CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size())));
     }
     m_sOmnidirectionalCameraInput.BlobList.resize(neighbourPositions.size());
     std::cout << "Spot " << neighbourPositions.size() << " neighbours" << std::endl;
