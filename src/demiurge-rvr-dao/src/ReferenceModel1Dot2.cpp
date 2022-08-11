@@ -142,7 +142,7 @@ void ReferenceModel1Dot2::FindNeighbours()
         return;
     }
     // identify groups of points which are the robots
-    UInt16 n_neigh = -1;
+    int16_t n_neigh = -1;
     // array of neighbours id which identifies uniquely a given robot
     // vector of same length as lidar input and with flag -1 to mean "no robot at this angle"
     std::vector<int> neighbourId(m_sLidarInput.size(), -1);
@@ -150,7 +150,6 @@ void ReferenceModel1Dot2::FindNeighbours()
     UInt16 latestRobotIndex;
     for (std::size_t i = 0; i < m_sLidarInput.size(); ++i)
     {
-        std::cout << i << std::endl;
         if (m_sLidarInput[i].Value > 0.75 || m_sLidarInput[i].Value < 0.10)
         {
             // we consider it is not a robot beyond 75cm or if the reading is too close to the sensor
