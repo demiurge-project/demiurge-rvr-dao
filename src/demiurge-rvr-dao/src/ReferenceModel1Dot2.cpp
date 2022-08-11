@@ -148,7 +148,7 @@ void ReferenceModel1Dot2::FindNeighbours()
     std::vector<int> neighbourId(m_sLidarInput.size(), -1);
     // stores the previous index identified as a robot
     UInt16 latestRobotIndex;
-    for (std::size_t i = 0; i != m_sLidarInput.size(); ++i)
+    for (std::size_t i = 0; i < m_sLidarInput.size(); ++i)
     {
         if (m_sLidarInput[i].Value > 0.75 || m_sLidarInput[i].Value < 0.10)
         {
