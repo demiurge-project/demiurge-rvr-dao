@@ -167,8 +167,8 @@ void ReferenceModel1Dot2::FindNeighbours()
         // ulterior point
         // if the 2 points have a difference of
         // less than 2 cm in distance to current robot and
-        // less than 2 degrees (0.035) in angle then they belong to the same robot
-        if (Abs(m_sLidarInput.at(i).Value - m_sLidarInput.at(latestRobotIndex).Value) < 0.02 && Abs(m_sLidarInput.at(i).Angle - m_sLidarInput.at(latestRobotIndex).Angle) < CRadians(0.035))
+        // less than 10 degrees (0.175) in angle then they belong to the same robot
+        if (Abs(m_sLidarInput.at(i).Value - m_sLidarInput.at(latestRobotIndex).Value) < 0.02 && Abs(m_sLidarInput.at(i).Angle - m_sLidarInput.at(latestRobotIndex).Angle) < CRadians(0.175))
         {
             neighbourId.at(i) = n_neigh;
             latestRobotIndex = i;
