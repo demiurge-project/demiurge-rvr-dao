@@ -163,6 +163,8 @@ private:
 
     /*
      * The omnidirectional camera input.
+     * This contains the position of each neighbour, either directly
+     * from the virtual camera in simulation, or from the lidar readings
      */
     CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings m_sOmnidirectionalCameraInput;
 
@@ -200,6 +202,12 @@ public:
     virtual void LidarHandler(const sensor_msgs::LaserScan &msg);
 
     virtual void PublishVelocity();
+
+    /*
+     * Clusters the lidar readings to neighbours, or uses the virtual camera in
+     * simulation
+     */
+    virtual void FindNeighbours();
 
 private:
     /* Sensors subscribers */

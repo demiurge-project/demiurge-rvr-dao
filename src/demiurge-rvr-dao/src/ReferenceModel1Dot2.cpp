@@ -133,6 +133,100 @@ CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings ReferenceModel1Dot2::GetOm
 /****************************************/
 /****************************************/
 
+void ReferenceModel1Dot2::FindNeighbours()
+{
+    if (!m_bHasRealRobotConnection)
+    {
+        // the camera readings already contains the neighbours
+        return;
+    }
+    // identify groups of points which are the robots
+    UInt8 n_neigh = -1;
+    // array of neighbours id which identifies uniquely a given robot
+    // vector of same length as lidar input and with flag -1 to mean "no robot at this angle"
+    std::vector<int> neighbourId(m_sLidarInput.size(), -1);
+    // stores the previous index identified as a robot
+    UInt16 latestRobotIndex;
+    for (std::size_t i = 0; i != m_sLidarInput.size(); ++i)
+    {
+        if (m_sLidarInput[i].Value > 0.75 || m_sLidarInput[i].Value < 0.10)
+        {
+            // we consider it is not a robot beyond 75cm or if the reading is too close to the sensor
+            continue;
+        }
+        // from here, the point belongs to a robot
+
+        // first robot point belongs to the first robot
+        if (n_neigh == -1)
+        {
+            // belongs to neighbour 0
+            neighbourId[i] = ++n_neigh;
+            latestRobotIndex = i;
+            continue;
+        }
+
+        // ulterior point
+        // if the 2 points have a difference of
+        // less than 10 cm in distance to current robot and
+        // less than 10 degrees (0.175) in angle then they belong to the same robot
+        if (Abs(m_sLidarInput[i].Value - m_sLidarInput[latestRobotIndex].Value) < 0.1 && Abs(m_sLidarInput[i].Angle - m_sLidarInput[latestRobotIndex].Angle) < CRadians(0.175))
+        {
+            neighbourId[i] = n_neigh;
+            latestRobotIndex = i;
+            continue;
+        }
+
+        // new group of points
+        neighbourId[i] = ++n_neigh;
+        latestRobotIndex = i;
+    }
+
+    // now we have the value of the group/robot each point belongs to,
+    // -1 being no group = not a robot
+    if (n_neigh == -1)
+    {
+        // no robot was found
+        m_sOmnidirectionalCameraInput.BlobList.clear();
+        return;
+    }
+
+    // each group will be represented by the average (Value, Angle) over the group
+    std::vector<CCI_RVRLidarSensor::SReading> neighbourPositions;
+    // group ids go from 0 to n_neigh => n_neigh +1 groups
+    neighbourPositions.resize(n_neigh + 1);
+    for (int i = 0; i <= n_neigh; ++i)
+    {
+        // all the positions for this particular group i
+        std::vector<CCI_RVRLidarSensor::SReading> groupPositions;
+        for (size_t j = 0; j < m_sLidarInput.size(); j++)
+        {
+            if (neighbourId[j] == i)
+            {
+                groupPositions.push_back(m_sLidarInput[j]);
+            }
+        }
+        // compute mean
+        std::vector<Real> groupSum(2, 0.0f);
+        for (const auto &groupMember : groupPositions)
+        {
+            groupSum[0] += groupMember.Value;
+            groupSum[1] += groupMember.Angle.GetValue();
+        }
+        neighbourPositions[i] = CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size()));
+    }
+    m_sOmnidirectionalCameraInput.BlobList.resize(neighbourPositions.size());
+    std::cout << "Spot " << n_neigh + 1 << " neighbours" << std::endl;
+    for (int i = 0; i < neighbourPositions.size(); i++)
+    {
+        m_sOmnidirectionalCameraInput.BlobList.at(i)->Angle = neighbourPositions.at(i).Angle;
+        m_sOmnidirectionalCameraInput.BlobList.at(i)->Distance = neighbourPositions.at(i).Value;
+        std::cout << "Distance : " << neighbourPositions.at(i).Value << " | Angle : " << neighbourPositions.at(i).Angle << std::endl;
+    }
+}
+
+/****************************************/
+/****************************************/
+
 const UInt8 ReferenceModel1Dot2::GetNumberNeighbors() const
 {
     return m_sOmnidirectionalCameraInput.BlobList.size();
@@ -191,6 +285,7 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors
 
 CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetNeighborsCenterOfMass()
 {
+    /* function is not in use for now, needs to be checked */
     CCI_RVRLidarSensor::TReadings neighbourPositions(m_sOmnidirectionalCameraInput.BlobList.size());
     for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
     {
