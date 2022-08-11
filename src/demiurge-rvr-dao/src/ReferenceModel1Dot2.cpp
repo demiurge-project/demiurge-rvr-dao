@@ -135,6 +135,7 @@ CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings ReferenceModel1Dot2::GetOm
 
 void ReferenceModel1Dot2::FindNeighbours()
 {
+    std::cout << "1" << std::endl;
     if (!m_bHasRealRobotConnection)
     {
         // the camera readings already contains the neighbours
