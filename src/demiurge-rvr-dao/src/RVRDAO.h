@@ -176,7 +176,7 @@ namespace argos
         /*
          * Getter for the number of surrounding robots.
          */
-        virtual const UInt8 GetNumberNeighbors() const
+        virtual const UInt8 GetNumberNeighbors()
         {
             UInt8 unEmptyVariable = 0;
             return unEmptyVariable;

@@ -138,6 +138,7 @@ void ReferenceModel1Dot2::FindNeighbours()
     if (!m_bHasRealRobotConnection)
     {
         // the camera readings already contains the neighbours
+        SetNumberNeighbors(m_sOmnidirectionalCameraInput.BlobList.size());
         return;
     }
     // identify groups of points which are the robots
@@ -222,14 +223,16 @@ void ReferenceModel1Dot2::FindNeighbours()
         m_sOmnidirectionalCameraInput.BlobList.at(i)->Distance = neighbourPositions.at(i).Value;
         std::cout << "Distance : " << neighbourPositions.at(i).Value << " | Angle : " << neighbourPositions.at(i).Angle << std::endl;
     }
+    SetNumberNeighbors(neighbourPositions.size());
 }
 
 /****************************************/
 /****************************************/
 
-const UInt8 ReferenceModel1Dot2::GetNumberNeighbors() const
+const UInt8 ReferenceModel1Dot2::GetNumberNeighbors()
 {
-    return m_sOmnidirectionalCameraInput.BlobList.size();
+    FindNeighbours();
+    return m_unNumberNeighbors;
 }
 
 /****************************************/
@@ -261,6 +264,7 @@ void ReferenceModel1Dot2::SetLidarInput(CCI_RVRLidarSensor::TReadings s_lidar_in
 
 CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors(Real f_alpha_parameter)
 {
+    FindNeighbours();
     CCI_RVRLidarSensor::TReadings neighbourPositions(m_sOmnidirectionalCameraInput.BlobList.size());
     for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
     {
@@ -286,6 +290,7 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors
 CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetNeighborsCenterOfMass()
 {
     /* function is not in use for now, needs to be checked */
+    FindNeighbours();
     CCI_RVRLidarSensor::TReadings neighbourPositions(m_sOmnidirectionalCameraInput.BlobList.size());
     for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
     {

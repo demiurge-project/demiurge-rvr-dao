@@ -86,7 +86,7 @@ public:
     /*
      * Getter for the number of surrounding robots.
      */
-    const UInt8 GetNumberNeighbors() const;
+    const UInt8 GetNumberNeighbors();
 
     /*
      * Setter for the number of surrounding robots.
