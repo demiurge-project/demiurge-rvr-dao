@@ -14,7 +14,7 @@ ReferenceModel1Dot2::ReferenceModel1Dot2()
     m_fMaxVelocity = 50; // 12 cm/s (real max speed is 155 cm/s but it is used as is by automode)
     m_fLeftWheelVelocity = 0;
     m_fRightWheelVelocity = 0;
-    m_sGroundInput.Color = CColor::WHITE;
+    m_bHasRealRobotConnection = false;
 }
 
 /****************************************/
@@ -29,6 +29,14 @@ void ReferenceModel1Dot2::Reset()
 {
     m_fLeftWheelVelocity = 0;
     m_fRightWheelVelocity = 0;
+}
+
+/****************************************/
+/****************************************/
+
+const bool ReferenceModel1Dot2::HasRealRobotConnection() const
+{
+    return m_bHasRealRobotConnection;
 }
 
 /****************************************/
@@ -277,6 +285,7 @@ void ReferenceModel1Dot2::ColorHandler(const std_msgs::ColorRGBA &msg)
     m_sGroundInput.Color.SetGreen((argos::UInt8)msg.g);
     m_sGroundInput.Color.SetBlue((argos::UInt8)msg.b);
     m_sGroundInput.Color.SetAlpha((argos::UInt8)msg.a);
+    m_bHasRealRobotConnection = true;
 }
 
 /****************************************/
@@ -285,6 +294,7 @@ void ReferenceModel1Dot2::ColorHandler(const std_msgs::ColorRGBA &msg)
 void ReferenceModel1Dot2::LightHandler(const sensor_msgs::Illuminance &msg)
 {
     m_sLightInput.Value = msg.illuminance;
+    m_bHasRealRobotConnection = true;
 }
 
 /****************************************/

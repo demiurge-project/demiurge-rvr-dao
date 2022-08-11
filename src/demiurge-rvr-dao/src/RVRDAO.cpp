@@ -70,4 +70,9 @@ namespace argos
     {
         return m_fMaxVelocity;
     }
+
+    const bool RVRDAO::HasRealRobotConnection() const
+    {
+        return false;
+    }
 }

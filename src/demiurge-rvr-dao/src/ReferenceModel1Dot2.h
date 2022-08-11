@@ -41,6 +41,11 @@ public:
     virtual void Reset();
 
     /*
+     * Checks if the reference model has had real robot connection.
+     */
+    const bool HasRealRobotConnection() const;
+
+    /*
      * Getter for the proximity input.
      */
     CCI_RVRProximitySensor::TReadings GetProximityInput() const;

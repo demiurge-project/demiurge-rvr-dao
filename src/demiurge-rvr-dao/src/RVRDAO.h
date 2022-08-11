@@ -51,6 +51,8 @@ namespace argos
          */
         virtual void Reset() = 0;
 
+        virtual const bool HasRealRobotConnection() const;
+
         /*
          * Setter for the wheels velocity.
          */
@@ -249,6 +251,11 @@ namespace argos
          * Pointer to the random number generator.
          */
         CRandom::CRNG *m_pcRng;
+
+        /**
+         * Indicates if the robot has updated its readings according to ROS.
+         */
+        bool m_bHasRealRobotConnection;
     };
 }
 
