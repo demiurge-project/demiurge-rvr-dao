@@ -188,6 +188,7 @@ void ReferenceModel1Dot2::FindNeighbours()
     if (n_neigh == -1)
     {
         // no robot was found
+        std::cout << "No neighbour found" << std::endl;
         m_sOmnidirectionalCameraInput.BlobList.clear();
         return;
     }
