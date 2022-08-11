@@ -155,9 +155,6 @@ void ReferenceModel1Dot2::FindNeighbours()
             // we consider it is not a robot beyond 75cm or if the reading is too close to the sensor
             continue;
         }
-        // from here, the point belongs to a robot
-        std::cout << "point at distance " << m_sLidarInput[i].Value << " and angle " << m_sLidarInput[i].Angle << " is a robot" << std::endl;
-
         // first robot point belongs to the first robot
         if (n_neigh == -1)
         {
@@ -218,7 +215,7 @@ void ReferenceModel1Dot2::FindNeighbours()
         neighbourPositions.at(i) = CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size()));
     }
     m_sOmnidirectionalCameraInput.BlobList.resize(neighbourPositions.size());
-    std::cout << "Spot " << n_neigh + 1 << " neighbours" << std::endl;
+    std::cout << "Spot " << neighbourPositions.size() << " neighbours" << std::endl;
     for (int i = 0; i < neighbourPositions.size(); i++)
     {
         m_sOmnidirectionalCameraInput.BlobList.at(i)->Angle = neighbourPositions.at(i).Angle;
