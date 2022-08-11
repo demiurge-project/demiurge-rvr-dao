@@ -156,6 +156,7 @@ void ReferenceModel1Dot2::FindNeighbours()
             continue;
         }
         // from here, the point belongs to a robot
+        std::cout << "point at distance " << m_sLidarInput[i].Value << " and angle " << m_sLidarInput[i].Angle << " is a robot" << std::endl;
 
         // first robot point belongs to the first robot
         if (n_neigh == -1)
