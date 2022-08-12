@@ -433,7 +433,7 @@ void ReferenceModel1Dot2::LidarHandler(const sensor_msgs::LaserScan &msg)
     {
         m_sLidarInput[i].Angle = CRadians(msg.angle_min + i * msg.angle_increment);
         if (msg.ranges[i] > 0.10f and msg.ranges[i] < 0.5f)
-            std::cout << "Stg at " << i << " " << m_sLidarInput[i].Angle;
+            std::cout << "Stg at " << i << " " << m_sLidarInput[i].Angle << std::endl;
         m_sLidarInput[i].Value = msg.ranges[i];
     }
 }
