@@ -433,7 +433,7 @@ void ReferenceModel1Dot2::LidarHandler(const sensor_msgs::LaserScan &msg)
     {
         if (msg.ranges[i] > 0.0f && msg.ranges[i] < 0.5f)
         {
-            std::cout << "something close at " << m_sLidarInput[i].Angle << std::endl;
+            std::cout << "something close at " << i << " " << m_sLidarInput[i].Angle << std::endl;
         }
         m_sLidarInput[i].Value = msg.ranges[i];
     }
