@@ -431,7 +431,7 @@ void ReferenceModel1Dot2::LidarHandler(const sensor_msgs::LaserScan &msg)
     // 0 is in the back of the robot
     for (int i = 0; i < 719; ++i)
     {
-        if (msg.ranges[i] > 0.0f && msg.ranges[i] < 1.0f)
+        if (msg.ranges[i] > 0.0f && msg.ranges[i] < 0.5f)
         {
             std::cout << "something close at " << m_sLidarInput[i].Angle << std::endl;
         }
