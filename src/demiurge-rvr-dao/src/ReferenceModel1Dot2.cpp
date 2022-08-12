@@ -283,7 +283,6 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors
     // we now have the position of each neighbour
     // we can compute the attraction vector
     CVector2 lidarVectorSum(0, CRadians::ZERO);
-    std::cout << "counting " << m_sOmnidirectionalCameraInput.BlobList.size() << "neighbours in att vec meth" << std::endl;
     for (auto &robotPosition : m_sOmnidirectionalCameraInput.BlobList)
     {
         lidarVectorSum += CVector2(f_alpha_parameter / (1 + robotPosition->Distance), robotPosition->Angle.SignedNormalize());
