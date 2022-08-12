@@ -428,8 +428,15 @@ void ReferenceModel1Dot2::TerarangerHandler(const teraranger_array::RangeArray &
 
 void ReferenceModel1Dot2::LidarHandler(const sensor_msgs::LaserScan &msg)
 {
-    for (short int i = 0; i < 719; ++i)
+    // 0 is in the back of the robot
+    for (int i = 0; i < 719; ++i)
+    {
+        if (msg.ranges[i] > 0.0f && msg.ranges[i] < 1.0f)
+        {
+            std::cout << "something close at " << m_sLidarInput[i].Angle << std::endl;
+        }
         m_sLidarInput[i].Value = msg.ranges[i];
+    }
 }
 
 void ReferenceModel1Dot2::PublishVelocity()
