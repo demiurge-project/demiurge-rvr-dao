@@ -32,5 +32,7 @@
 *.appe*/a/b/c/*
 
 build/
+devel/
+install/
 .vscode/
 .idea/
