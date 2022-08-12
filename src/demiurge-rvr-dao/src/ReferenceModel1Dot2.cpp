@@ -304,6 +304,7 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetNeighborsCenterOfMass()
     for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
     {
         neighbourPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput.BlobList[i]->Distance, m_sOmnidirectionalCameraInput.BlobList[i]->Angle);
+        std::cout << "neighpos : " << neighbourPositions[i].Angle << std::endl;
     }
     // we now have the position of each neighbour
     // we can compute the attraction vector
