@@ -48,7 +48,11 @@ CCI_RVRProximitySensor::SReading ReferenceModel1Dot2::GetProximityReading()
     CVector2 cSumProxi(0, CRadians::ZERO);
     for (UInt8 i = 0; i < m_sProximityInput.size(); i++)
     {
-        cSumProxi += CVector2(m_sProximityInput[i].Value, m_sProximityInput[i].Angle.SignedNormalize());
+        if (m_sProximityInput[i].Value == 0.0f)
+        {
+            m_sProximityInput[i].Value = -std::numeric_limits<Real>::max();
+        }
+        cSumProxi += CVector2(1 / m_sProximityInput[i].Value, m_sProximityInput[i].Angle.SignedNormalize());
     }
 
     cOutputReading.Value = (cSumProxi.Length() > 1) ? 1 : cSumProxi.Length();
@@ -411,14 +415,14 @@ void ReferenceModel1Dot2::TerarangerHandler(const teraranger_array::RangeArray &
     {
         if (msg.ranges[i].range <= 0.4f)
         {
-            m_sProximityInput.at(i).Value = Exp(-msg.ranges[i].range);
+            m_sProximityInput.at(i).Value = msg.ranges[i].range;
         }
         else
         {
-            m_sProximityInput.at(i).Value = 0.0f;
+            m_sProximityInput.at(i).Value = std::numeric_limits<Real>::max();
         }
 
-        CRange<Real>(0.0f, 1.0f).TruncValue(m_sProximityInput.at(i).Value);
+        // CRange<Real>(0.0f, 1.0f).TruncValue(m_sProximityInput.at(i).Value);
     }
 }
 
