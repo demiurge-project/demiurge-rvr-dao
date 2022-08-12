@@ -225,13 +225,13 @@ void ReferenceModel1Dot2::FindNeighbours()
         neighbourPositions.push_back(CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size())));
     }
     m_sOmnidirectionalCameraInput.BlobList.resize(neighbourPositions.size());
-    std::cout << "Spot " << neighbourPositions.size() << " neighbours" << std::endl;
+    // std::cout << "Spot " << neighbourPositions.size() << " neighbours" << std::endl;
     for (int i = 0; i < neighbourPositions.size(); i++)
     {
         CCI_ColoredBlobOmnidirectionalCameraSensor::SBlob dummyBlob(CColor::BLACK, neighbourPositions.at(i).Angle, neighbourPositions.at(i).Value);
         m_sOmnidirectionalCameraInput.BlobList.at(i) = &dummyBlob;
-        std::cout << "Distance : " << neighbourPositions.at(i).Value << " | Angle : " << neighbourPositions.at(i).Angle << std::endl;
-        std::cout << "Distance cam : " << m_sOmnidirectionalCameraInput.BlobList.at(i)->Distance << " | Angle : " << m_sOmnidirectionalCameraInput.BlobList.at(i)->Angle << std::endl;
+        // std::cout << "Distance : " << neighbourPositions.at(i).Value << " | Angle : " << neighbourPositions.at(i).Angle << std::endl;
+        // std::cout << "Distance cam : " << m_sOmnidirectionalCameraInput.BlobList.at(i)->Distance << " | Angle : " << m_sOmnidirectionalCameraInput.BlobList.at(i)->Angle << std::endl;
     }
     SetNumberNeighbors(neighbourPositions.size());
 }
@@ -276,16 +276,17 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors
 {
     FindNeighbours();
     CCI_RVRLidarSensor::TReadings neighbourPositions(m_sOmnidirectionalCameraInput.BlobList.size());
-    for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
-    {
-        neighbourPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput.BlobList[i]->Distance, m_sOmnidirectionalCameraInput.BlobList[i]->Angle);
-    }
+    // for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
+    // {
+    //     neighbourPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput.BlobList[i]->Distance, m_sOmnidirectionalCameraInput.BlobList[i]->Angle);
+    // }
     // we now have the position of each neighbour
     // we can compute the attraction vector
     CVector2 lidarVectorSum(0, CRadians::ZERO);
-    for (auto &robotPosition : neighbourPositions)
+    std::cout << "counting " << m_sOmnidirectionalCameraInput.BlobList.size() << "neighbours in att vec meth" << std::endl;
+    for (auto &robotPosition : m_sOmnidirectionalCameraInput.BlobList)
     {
-        lidarVectorSum += CVector2(f_alpha_parameter / (1 + robotPosition.Value), robotPosition.Angle.SignedNormalize());
+        lidarVectorSum += CVector2(f_alpha_parameter / (1 + robotPosition->Distance), robotPosition->Angle.SignedNormalize());
     }
     CCI_RVRLidarSensor::SReading cLidarReading;
     cLidarReading.Value = lidarVectorSum.Length();
