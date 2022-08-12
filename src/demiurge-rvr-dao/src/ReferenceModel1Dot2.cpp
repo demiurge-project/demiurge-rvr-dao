@@ -284,7 +284,7 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors
     CVector2 lidarVectorSum(0, CRadians::ZERO);
     for (auto &robotPosition : neighbourPositions)
     {
-        lidarVectorSum += CVector2(f_alpha_parameter / (1 + robotPosition.Value), robotPosition.Angle.SignedNormalize());
+        lidarVectorSum += CVector2(f_alpha_parameter / robotPosition.Value, robotPosition.Angle.SignedNormalize());
     }
     CCI_RVRLidarSensor::SReading cLidarReading;
     cLidarReading.Value = lidarVectorSum.Length();
