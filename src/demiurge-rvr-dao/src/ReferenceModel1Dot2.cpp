@@ -225,12 +225,12 @@ void ReferenceModel1Dot2::FindNeighbours()
         neighbourPositions.push_back(CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size())));
     }
     m_sOmnidirectionalCameraInput.BlobList.resize(neighbourPositions.size());
-    // std::cout << "Spot " << neighbourPositions.size() << " neighbours" << std::endl;
+    std::cout << "Spot " << neighbourPositions.size() << " neighbours" << std::endl;
     for (int i = 0; i < neighbourPositions.size(); i++)
     {
         CCI_ColoredBlobOmnidirectionalCameraSensor::SBlob dummyBlob(CColor::BLACK, neighbourPositions.at(i).Angle, neighbourPositions.at(i).Value);
         m_sOmnidirectionalCameraInput.BlobList.at(i) = &dummyBlob;
-        // std::cout << "Distance : " << neighbourPositions.at(i).Value << " | Angle : " << neighbourPositions.at(i).Angle << std::endl;
+        std::cout << "Distance : " << neighbourPositions.at(i).Value << " | Angle : " << neighbourPositions.at(i).Angle << std::endl;
     }
     SetNumberNeighbors(neighbourPositions.size());
 }
@@ -284,7 +284,7 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors
     CVector2 lidarVectorSum(0, CRadians::ZERO);
     for (auto &robotPosition : neighbourPositions)
     {
-        lidarVectorSum += CVector2(f_alpha_parameter / robotPosition.Value, robotPosition.Angle.SignedNormalize());
+        lidarVectorSum += CVector2(f_alpha_parameter / (1 + robotPosition.Value), robotPosition.Angle.SignedNormalize());
     }
     CCI_RVRLidarSensor::SReading cLidarReading;
     cLidarReading.Value = lidarVectorSum.Length();
