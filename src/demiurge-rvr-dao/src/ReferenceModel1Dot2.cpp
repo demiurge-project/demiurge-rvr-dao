@@ -169,7 +169,6 @@ void ReferenceModel1Dot2::FindNeighbours()
             // we consider it is not a robot beyond 75cm or if the reading is too close to the sensor
             continue;
         }
-        std::cout << "point of interest" << std::endl;
         // first robot point belongs to the first robot
         if (n_neigh == -1)
         {
@@ -236,7 +235,7 @@ void ReferenceModel1Dot2::FindNeighbours()
         neighbourPositions.push_back(CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size())));
     }
     m_vecNeighbors.resize(neighbourPositions.size());
-    // std::cout << "Spot " << neighbourPositions.size() << " neighbours" << std::endl;
+    std::cout << "Spot " << neighbourPositions.size() << " neighbours" << std::endl;
     for (int i = 0; i < neighbourPositions.size(); i++)
     {
         // CCI_ColoredBlobOmnidirectionalCameraSensor::SBlob dummyBlob(CColor::BLACK, neighbourPositions.at(i).Angle, neighbourPositions.at(i).Value);
