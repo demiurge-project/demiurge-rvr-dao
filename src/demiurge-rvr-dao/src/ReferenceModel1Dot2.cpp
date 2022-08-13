@@ -169,6 +169,7 @@ void ReferenceModel1Dot2::FindNeighbours()
             // we consider it is not a robot beyond 75cm or if the reading is too close to the sensor
             continue;
         }
+        std::cout << "point of interest" << std::endl;
         // first robot point belongs to the first robot
         if (n_neigh == -1)
         {
@@ -199,7 +200,7 @@ void ReferenceModel1Dot2::FindNeighbours()
     if (n_neigh == -1)
     {
         // no robot was found
-        std::cout << "No neighbour found" << std::endl;
+        // std::cout << "No neighbour found" << std::endl;
         m_vecNeighbors.clear();
         return;
     }
