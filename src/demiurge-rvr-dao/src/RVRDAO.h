@@ -89,6 +89,11 @@ namespace argos
         const Real &GetMaxVelocity() const;
 
         /*
+         * Setter for the maximal wheels velocity.
+         */
+        void SetMaxVelocity(const Real &un_max_velocity);
+
+        /*
          * Getter for the random number generetor.
          */
         CRandom::CRNG *GetRandomNumberGenerator() const;

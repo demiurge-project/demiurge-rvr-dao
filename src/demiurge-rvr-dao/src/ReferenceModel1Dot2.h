@@ -25,6 +25,23 @@ using namespace argos;
 class ReferenceModel1Dot2 : public RVRDAO
 {
 public:
+    struct Neighbour
+    {
+        Real Distance;
+        CRadians Angle;
+
+        Neighbour()
+        {
+            Distance = 0.0;
+            Angle = CRadians::ZERO;
+        }
+
+        Neighbour(Real f_distance, CRadians f_angle) : Distance(f_distance),
+                                                       Angle(f_angle)
+        {
+        }
+    };
+
     /*
      *  Class constructor.
      */
@@ -163,8 +180,7 @@ private:
 
     /*
      * The omnidirectional camera input.
-     * This contains the position of each neighbour, either directly
-     * from the virtual camera in simulation, or from the lidar readings
+     * This contains the position of each neighbour in simulation.
      */
     CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings m_sOmnidirectionalCameraInput;
 
@@ -172,6 +188,9 @@ private:
      * The number of surrounding robots.
      */
     UInt8 m_unNumberNeighbors;
+
+    /** The list of neighbours */
+    std::vector<Neighbour> m_vecNeighbors;
 
 public:
     /*
