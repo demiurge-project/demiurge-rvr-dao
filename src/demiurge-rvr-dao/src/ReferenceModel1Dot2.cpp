@@ -235,14 +235,13 @@ void ReferenceModel1Dot2::FindNeighbours()
         neighbourPositions.push_back(CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size())));
     }
     m_vecNeighbors.resize(neighbourPositions.size());
-    std::cout << "Spot " << neighbourPositions.size() << " neighbours" << std::endl;
     for (int i = 0; i < neighbourPositions.size(); i++)
     {
         // CCI_ColoredBlobOmnidirectionalCameraSensor::SBlob dummyBlob(CColor::BLACK, neighbourPositions.at(i).Angle, neighbourPositions.at(i).Value);
         // m_vecNeighbors = new CCI_ColoredBlobOmnidirectionalCameraSensor::SBlob(CColor::BLACK, neighbourPositions.at(i).Angle, neighbourPositions.at(i).Value);
         m_vecNeighbors.at(i).Angle = neighbourPositions.at(i).Angle;
         m_vecNeighbors.at(i).Distance = neighbourPositions.at(i).Value;
-        // std::cout << "Distance : " << neighbourPositions.at(i).Value << " | Angle : " << neighbourPositions.at(i).Angle << std::endl;
+        std::cout << "Distance : " << m_vecNeighbors.at(i).Distance << " | Angle : " << m_vecNeighbors.at(i).Angle << std::endl;
         // std::cout << "Distance cam : " << m_sOmnidirectionalCameraInput.BlobList.at(i)->Distance << " | Angle : " << m_sOmnidirectionalCameraInput.BlobList.at(i)->Angle << std::endl;
     }
     SetNumberNeighbors(m_vecNeighbors.size());
