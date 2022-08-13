@@ -54,7 +54,15 @@ CCI_RVRProximitySensor::SReading ReferenceModel1Dot2::GetProximityReading()
         }
         cSumProxi += CVector2(1 / m_sProximityInput[i].Value, m_sProximityInput[i].Angle.SignedNormalize());
     }
-
+    // avoid neighbours
+    FindNeighbours();
+    for (UInt8 i = 0; i < m_vecNeighbors.size(); i++)
+    {
+        if (m_vecNeighbors.at(i).Distance <= 0.4)
+        {
+            cSumProxi += CVector2(1 / m_sProximityInput[i].Value, m_sProximityInput[i].Angle.SignedNormalize());
+        }
+    }
     cOutputReading.Value = (cSumProxi.Length() > 1) ? 1 : cSumProxi.Length();
     cOutputReading.Angle = cSumProxi.Angle().SignedNormalize();
     return cOutputReading;
