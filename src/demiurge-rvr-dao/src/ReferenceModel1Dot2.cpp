@@ -60,7 +60,9 @@ CCI_RVRProximitySensor::SReading ReferenceModel1Dot2::GetProximityReading()
     {
         if (m_vecNeighbors.at(i).Distance <= 0.55) // 0.4 + robot radius
         {
-            cSumProxi += CVector2(1 / m_sProximityInput[i].Value, m_sProximityInput[i].Angle.SignedNormalize());
+            Real sDistToObstacle = m_vecNeighbors.at(i).Distance - 0.275; // - 2 radii of the robot
+            sDistToObstacle = sDistToObstacle <= 0.0f ? 0.001f : sDistToObstacle;
+            cSumProxi += CVector2(1 / sDistToObstacle, m_vecNeighbors.at(i).Angle.SignedNormalize());
         }
     }
     cOutputReading.Value = (cSumProxi.Length() > 1) ? 1 : cSumProxi.Length();
