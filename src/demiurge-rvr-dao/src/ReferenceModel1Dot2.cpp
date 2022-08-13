@@ -142,12 +142,15 @@ void ReferenceModel1Dot2::FindNeighbours()
     if (!m_bHasRealRobotConnection)
     {
         // the camera readings already contains the neighbours
-        m_vecNeighbors.resize(m_sOmnidirectionalCameraInput.BlobList.size());
+        m_vecNeighbors.clear();
         // set every neighbour as the distance and angle from the bloblist
         for (size_t i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
         {
-            m_vecNeighbors.at(i).Distance = m_sOmnidirectionalCameraInput.BlobList[i]->Distance;
-            m_vecNeighbors.at(i).Angle = m_sOmnidirectionalCameraInput.BlobList[i]->Angle;
+            if (m_sOmnidirectionalCameraInput.BlobList[i]->Distance < 75)
+            {
+                m_vecNeighbors.push_back(Neighbour(m_sOmnidirectionalCameraInput.BlobList[i]->Distance,
+                                                   m_sOmnidirectionalCameraInput.BlobList[i]->Angle));
+            }
         }
         SetNumberNeighbors(m_vecNeighbors.size());
         return;
@@ -293,11 +296,7 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors
     CVector2 lidarVectorSum(0, CRadians::ZERO);
     for (auto &robotPosition : m_vecNeighbors)
     {
-        std::cout << "Distance " << robotPosition.Distance << std::endl;
-        std::cout << "Angle " << robotPosition.Angle << std::endl;
-        std::cout << "Alpha " << f_alpha_parameter << std::endl;
-
-        lidarVectorSum += CVector2(f_alpha_parameter / (1 + (robotPosition.Distance * 100.0f)), robotPosition.Angle.SignedNormalize());
+        lidarVectorSum += CVector2(f_alpha_parameter / (1 + (robotPosition.Distance)), robotPosition.Angle.SignedNormalize());
     }
     CCI_RVRLidarSensor::SReading cLidarReading;
     cLidarReading.Value = lidarVectorSum.Length();
@@ -317,7 +316,6 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetNeighborsCenterOfMass()
     for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
     {
         neighbourPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput.BlobList[i]->Distance, m_sOmnidirectionalCameraInput.BlobList[i]->Angle);
-        std::cout << "neighpos : " << neighbourPositions[i].Angle << std::endl;
     }
     // we now have the position of each neighbour
     // we can compute the attraction vector
