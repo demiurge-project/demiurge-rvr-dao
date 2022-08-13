@@ -241,7 +241,7 @@ void ReferenceModel1Dot2::FindNeighbours()
         // m_vecNeighbors = new CCI_ColoredBlobOmnidirectionalCameraSensor::SBlob(CColor::BLACK, neighbourPositions.at(i).Angle, neighbourPositions.at(i).Value);
         m_vecNeighbors.at(i).Angle = neighbourPositions.at(i).Angle;
         m_vecNeighbors.at(i).Distance = neighbourPositions.at(i).Value;
-        std::cout << "Distance : " << m_vecNeighbors.at(i).Distance << " | Angle : " << m_vecNeighbors.at(i).Angle << std::endl;
+        // std::cout << "Distance : " << m_vecNeighbors.at(i).Distance << " | Angle : " << m_vecNeighbors.at(i).Angle << std::endl;
         // std::cout << "Distance cam : " << m_sOmnidirectionalCameraInput.BlobList.at(i)->Distance << " | Angle : " << m_sOmnidirectionalCameraInput.BlobList.at(i)->Angle << std::endl;
     }
     SetNumberNeighbors(m_vecNeighbors.size());
