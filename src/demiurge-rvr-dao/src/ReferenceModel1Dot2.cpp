@@ -58,7 +58,7 @@ CCI_RVRProximitySensor::SReading ReferenceModel1Dot2::GetProximityReading()
     FindNeighbours();
     for (UInt8 i = 0; i < m_vecNeighbors.size(); i++)
     {
-        if (m_vecNeighbors.at(i).Distance <= 0.4)
+        if (m_vecNeighbors.at(i).Distance <= 0.55) // 0.4 + robot radius
         {
             cSumProxi += CVector2(1 / m_sProximityInput[i].Value, m_sProximityInput[i].Angle.SignedNormalize());
         }
