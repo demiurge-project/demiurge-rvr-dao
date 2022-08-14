@@ -106,7 +106,7 @@ void ReferenceModel1Dot1::SetGroundInput(CCI_RVRGroundColorSensor::SReading s_gr
 /****************************************/
 /****************************************/
 
-const UInt8 ReferenceModel1Dot1::GetNumberNeighbors() const
+const UInt8 ReferenceModel1Dot1::GetNumberNeighbors()
 {
     return LidarToRobotPositions(m_sLidarInput).size();
 }

@@ -8,6 +8,22 @@ using namespace argos;
 class ReferenceModel1Dot2 : public RVRDAO
 {
 public:
+    struct Neighbour
+    {
+        Real Distance;
+        CRadians Angle;
+
+        Neighbour()
+        {
+            Distance = 0.0;
+            Angle = CRadians::ZERO;
+        }
+
+        Neighbour(Real f_distance, CRadians f_angle) : Distance(f_distance),
+                                                       Angle(f_angle)
+        {
+        }
+    };
     /*
      *  Class constructor.
      */
@@ -91,7 +107,7 @@ public:
     /*
      * Getter for the number of surrounding robots.
      */
-    const UInt8 GetNumberNeighbors() const;
+    const UInt8 GetNumberNeighbors();
 
     /*
      * Setter for the number of surrounding robots.
@@ -107,6 +123,12 @@ public:
      * Getter for the center of mass of neighbors computed with RaB messages
      */
     CCI_RVRLidarSensor::SReading GetNeighborsCenterOfMass();
+
+    /*
+     * Clusters the lidar readings to neighbours, or uses the virtual camera in
+     * simulation
+     */
+    virtual void FindNeighbours();
 
 private:
     /*
@@ -138,6 +160,9 @@ private:
      * The number of surrounding robots.
      */
     UInt8 m_unNumberNeighbors;
+
+    /** The list of neighbours */
+    std::vector<Neighbour> m_vecNeighbors;
 };
 
 #endif

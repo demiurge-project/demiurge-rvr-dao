@@ -70,4 +70,12 @@ namespace argos
     {
         return m_fMaxVelocity;
     }
+
+    /****************************************/
+    /****************************************/
+
+    void RVRDAO::SetMaxVelocity(const Real &un_max_velocity)
+    {
+        m_fMaxVelocity = un_max_velocity;
+    }
 }
