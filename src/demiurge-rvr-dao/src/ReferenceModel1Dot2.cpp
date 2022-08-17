@@ -377,7 +377,7 @@ void ReferenceModel1Dot2::InitROS()
     ros::NodeHandle rosNode;
 
     // setup color sensor subscriber
-    color_sensor_sub = rosNode.subscribe("/rvr/ground_color", 10, &ReferenceModel1Dot2::ColorHandler, this);
+    color_sensor_sub = rosNode.subscribe("/rvr/fixed_color", 10, &ReferenceModel1Dot2::ColorHandler, this);
     // setup IMU subscriber
     // imu_subscriber = rosNode.subscribe("/rvr/imu", 10, &ReferenceModel1Dot2::ImuHandler, this);
     // setup light sensor subscriber
