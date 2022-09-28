@@ -138,9 +138,25 @@ public:
     virtual void SetNumberNeighbors(const UInt8 &un_number_neighbors);
 
     /*
+     * Getter for the number of surrounding beacons.
+     */
+    const UInt8 GetNumberBeacons();
+
+    /*
+     * Setter for the number of surrounding beacons.
+     */
+    virtual void SetNumberBeacons(const UInt8 &un_number_beacons);
+
+
+    /*
      * Getter for the vector representing the attraction force to the neighbors computed with lidar information
      */
     CCI_RVRLidarSensor::SReading GetAttractionVectorToNeighbors(Real f_alpha_parameter);
+
+    /*
+     * Getter for the vector representing the attraction force to the beacons computed with lidar information
+     */
+    CCI_RVRLidarSensor::SReading GetAttractionVectorToBeacons();
 
     /*
      * Getter for the center of mass of neighbors computed with RaB messages
@@ -192,6 +208,14 @@ private:
     /** The list of neighbours */
     std::vector<Neighbour> m_vecNeighbors;
 
+    /*
+     * The number of surrounding beacons.
+     */
+    UInt8 m_unNumberBeacons;
+
+    /** The list of beacons */
+    std::vector<Neighbour> m_vecBeacons;
+
 public:
     /*
     Initializes ROS.
@@ -227,6 +251,12 @@ public:
      * simulation
      */
     virtual void FindNeighbours();
+
+    /*
+     * Clusters the lidar readings to beacons, or uses the virtual camera in
+     * simulation
+     */
+    virtual void FindBeacons();
 
 private:
     /* Sensors subscribers */

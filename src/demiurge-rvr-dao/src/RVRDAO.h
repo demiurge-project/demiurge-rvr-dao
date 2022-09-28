@@ -229,6 +229,28 @@ namespace argos
          */
         // virtual void SetRangeAndBearingMessageToSend(UInt8 un_message){};
 
+        /*
+         * Getter for attraction force to the beacon (light source) computed with lidar information
+         */
+        virtual CCI_RVRLidarSensor::SReading GetAttractionVectorToBeacons()
+        { // RM 1.2
+            return CCI_RVRLidarSensor::SReading();
+        };
+
+        /*
+         * Setter for the number of surrounding robots.
+         */
+        virtual void SetNumberBeacons(const UInt8 &un_number_beacons){};
+
+        /*
+         * Getter for the number of surrounding robots.
+         */
+        virtual const UInt8 GetNumberBeacons()
+        {
+            UInt8 unEmptyVariable = 0;
+            return unEmptyVariable;
+        };
+
         virtual void InitROS(){};
 
     protected:
