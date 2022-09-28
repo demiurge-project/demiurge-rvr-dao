@@ -34,13 +34,28 @@ CCI_RVRProximitySensor::SReading ReferenceModel1Dot2::GetProximityReading()
 {
     CCI_RVRProximitySensor::SReading cOutputReading;
     CVector2 cSumProxi(0, CRadians::ZERO);
+    Real fNormalizeDistance = 0.0;
     for (UInt8 i = 0; i < m_sProximityInput.size(); i++)
     {
-        if (m_sProximityInput[i].Value == 0.0f)
-        {
-            m_sProximityInput[i].Value = -std::numeric_limits<Real>::max();
+        //if (m_sProximityInput[i].Value == 0.0f)
+        //{
+        //    m_sProximityInput[i].Value = -std::numeric_limits<Real>::max();
+        //}
+
+        // Added to normalize values with respect to a range of 0.4 set in the proximity sensors, values out of the if are out of range
+        // TODO: set this with respect to the parameter in the instantiation of the sensor in C
+        if(m_sProximityInput[i].Value < 0.05 || m_sProximityInput[i].Value > 0.4){
+
+            fNormalizeDistance = 0.0;                     
         }
-        cSumProxi += CVector2(1 / m_sProximityInput[i].Value, m_sProximityInput[i].Angle.SignedNormalize());
+        else {
+            // Added division by 17.5 to normalize values with respect to a range of 0.4 set in the proximity sensors
+            // TODO: set this with respect to the parameter in the instantiation of the sensor in C
+            fNormalizeDistance = ((1 / m_sProximityInput[i].Value) - 2.5) / 17.5;
+        }
+        
+        cSumProxi += CVector2(fNormalizeDistance, m_sProximityInput[i].Angle.SignedNormalize());
+
     }
     // avoid neighbours
     FindNeighbours();
@@ -50,11 +65,15 @@ CCI_RVRProximitySensor::SReading ReferenceModel1Dot2::GetProximityReading()
         {
             Real sDistToObstacle = m_vecNeighbors.at(i).Distance - 0.275; // - 2 radii of the robot
             sDistToObstacle = sDistToObstacle <= 0.0f ? 0.001f : sDistToObstacle;
-            cSumProxi += CVector2(1 / sDistToObstacle, m_vecNeighbors.at(i).Angle.SignedNormalize());
+            
+            fNormalizeDistance = ((1 / m_sProximityInput[i].Value) - 3.6364) / 996.3636;
+
+            cSumProxi += CVector2(fNormalizeDistance, m_vecNeighbors.at(i).Angle.SignedNormalize());
         }
     }
+    
     cOutputReading.Value = (cSumProxi.Length() > 1) ? 1 : cSumProxi.Length();
-    cOutputReading.Angle = cSumProxi.Angle().SignedNormalize();
+    cOutputReading.Angle = cSumProxi.Angle().SignedNormalize(); 
     return cOutputReading;
 }
 
@@ -410,6 +429,7 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors
     // }
     // we now have the position of each neighbour
     // we can compute the attraction vector
+    // In the epuck, the vector sums possibly many messages from the same robot, artificially increasing the attraction vector.
     CVector2 lidarVectorSum(0, CRadians::ZERO);
     for (auto &robotPosition : m_vecNeighbors)
     {
@@ -439,13 +459,13 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToBeacons()
     CCI_RVRLidarSensor::SReading cLidarReading;
     // Set 1.0 as it was origially set for the e-puck
     if (lidarVectorSum.Length()!=0){
-        cLidarReading.Value = 200.0;
+        cLidarReading.Value = 1.0;
     }
     else{
         cLidarReading.Value = 0.0;
     }
 
-    cLidarReading.Value = lidarVectorSum.Length();
+    // cLidarReading.Value = lidarVectorSum.Length();
     cLidarReading.Angle = lidarVectorSum.Angle().SignedNormalize();
 
     return cLidarReading;
