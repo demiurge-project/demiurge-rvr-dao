@@ -295,57 +295,57 @@ void ReferenceModel1Dot2::FindBeacons()
         SetNumberBeacons(m_vecBeacons.size());
         return;
     }
-    // identify groups of points which are the robots
+    // identify groups of points which are objects (robots, beqcons, or unrelated objects)
     int16_t n_neigh = -1;
-    // array of neighbours id which identifies uniquely a given robot
-    // vector of same length as lidar input and with flag -1 to mean "no robot at this angle"
+    // array of neighbours id which identifies uniquely a given object
+    // vector of same length as lidar input and with flag -1 to mean "no object at this angle"
     std::vector<int> neighbourId(m_sLidarInput.size(), -1);
-    // stores the previous index identified as a robot
-    UInt16 latestRobotIndex;
+    // stores the previous index identified as an object
+    UInt16 latestObjectIndex;
     for (std::size_t i = 0; i < m_sLidarInput.size(); ++i)
     {
-        if (m_sLidarInput[i].Value > 0.75 || m_sLidarInput[i].Value < 0.10)
+        if (m_sLidarInput[i].Value > 2.75 || m_sLidarInput[i].Value < 0.10)
         {
-            // we consider it is not a robot beyond 75cm or if the reading is too close to the sensor
+            // we consider it is not an object beyond 2.75m or if the reading is too close to the sensor
             continue;
         }
-        // first robot point belongs to the first robot
+        // first object point belongs to the first object
         if (n_neigh == -1)
         {
             // belongs to neighbour 0
             neighbourId.at(i) = ++n_neigh;
-            latestRobotIndex = i;
+            latestObjectIndex = i;
             continue;
         }
 
         // ulterior point
         // if the 2 points have a difference of
-        // less than 2 cm in distance to current robot and
-        // less than 10 degrees (0.175) in angle then they belong to the same robot
-        if (Abs(m_sLidarInput.at(i).Value - m_sLidarInput.at(latestRobotIndex).Value) < 0.02 && Abs(m_sLidarInput.at(i).Angle - m_sLidarInput.at(latestRobotIndex).Angle) < CRadians(0.175))
+        // less than 2 cm in distance to current object and
+        // less than 10 degrees (0.175) in angle then they belong to the same object
+        if (Abs(m_sLidarInput.at(i).Value - m_sLidarInput.at(latestObjectIndex).Value) < 0.02 && Abs(m_sLidarInput.at(i).Angle - m_sLidarInput.at(latestObjectIndex).Angle) < CRadians(0.175))
         {
             neighbourId.at(i) = n_neigh;
-            latestRobotIndex = i;
+            latestObjectIndex = i;
             continue;
         }
 
         // new group of points
         neighbourId.at(i) = ++n_neigh;
-        latestRobotIndex = i;
+        latestObjectIndex = i;
     }
 
-    // now we have the value of the group/robot each point belongs to,
-    // -1 being no group = not a robot
+    // now we have the value of the group/object each point belongs to,
+    // -1 being no group = not an object
     if (n_neigh == -1)
     {
-        // no robot was found
+        // nothing
         // std::cout << "No neighbour found" << std::endl;
         m_vecBeacons.clear();
         return;
     }
 
     // each group will be represented by the average (Value, Angle) over the group
-    std::vector<CCI_RVRLidarSensor::SReading> neighbourPositions;
+    std::vector<CCI_RVRLidarSensor::SReading> beaconsPositions;
     // group ids go from 0 to n_neigh => n_neigh +1 groups
     // neighbourPositions.resize(n_neigh + 1);
     for (int i = 0; i <= n_neigh; ++i)
@@ -365,20 +365,56 @@ void ReferenceModel1Dot2::FindBeacons()
             // neighbourPositions.at(i) = CCI_RVRLidarSensor::SReading(0, CRadians::ZERO);
             continue;
         }
-        // compute mean
-        std::vector<Real> groupSum(2, 0.0f);
+
+        // identify which group(s) correspond to beacon(s)
+        Real previousPosition = 0.0f;
+        int nbPeaks = 0;
+        int tendency = 0;
         for (const auto &groupMember : groupPositions)
         {
-            groupSum[0] += groupMember.Value;
-            groupSum[1] += groupMember.Angle.GetValue();
+            //first loop: set previousPosition
+            if(previousPosition == 0)
+            {
+                previousPosition = groupMember.Value;
+            }
+            //second loop: set initial tendency
+            else if (tendency == 0)
+            {
+                tendency = (groupMember.Value - previousPosition > 0) - (groupMember.Value - previousPosition < 0);
+                previousPosition = groupMember.Value;
+            }
+            //check if tendency changed => max or min reached
+            else
+            {
+                int checkTendency = (groupMember.Value - previousPosition > 0) - (groupMember.Value - previousPosition < 0);
+                if(checkTendency != 0 && checkTendency != tendency)
+                {
+                    nbPeaks++;
+                }
+                previousPosition = groupMember.Value;
+            }          
         }
-        neighbourPositions.push_back(CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size())));
+        // if multiple min/max -> object has the complex shape of a beacon 
+        //(1 should be enough, but 2 taken in case of noise => needs testing)
+        if(nbPeaks > 2)
+        {
+            // compute mean
+            std::vector<Real> groupSum(2, 0.0f);
+            for (const auto &groupMember : groupPositions)
+            {
+                groupSum[0] += groupMember.Value;
+                groupSum[1] += groupMember.Angle.GetValue();
+            }
+            beaconsPositions.push_back(CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size())));
+            std::cout << "Beacon detected at " << groupSum[0] / groupPositions.size() <<  "m and at angle " << CRadians(groupSum[1] / groupPositions.size()) <<std::endl;
+        }
+        
     }
-    m_vecBeacons.resize(neighbourPositions.size());
-    for (int i = 0; i < neighbourPositions.size(); i++)
+    m_vecBeacons.resize(beaconsPositions.size());
+    for (int i = 0; i < beaconsPositions.size(); i++)
     {
-        m_vecBeacons.at(i).Angle = neighbourPositions.at(i).Angle;
-        m_vecBeacons.at(i).Distance = neighbourPositions.at(i).Value;
+        m_vecBeacons.at(i).Angle = beaconsPositions.at(i).Angle;
+        m_vecBeacons.at(i).Distance = beaconsPositions.at(i).Value;
     }
     SetNumberBeacons(m_vecBeacons.size());
 }
