@@ -138,7 +138,7 @@ void ReferenceModel1Dot2::SetGroundInput(CCI_RVRGroundColorSensor::SReading s_gr
 /****************************************/
 /****************************************/
 
-void ReferenceModel1Dot2::SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings s_omni_input)
+void ReferenceModel1Dot2::SetOmnidirectionalCameraInput(CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings s_omni_input)
 {
     m_sOmnidirectionalCameraInput = s_omni_input;
 }
@@ -146,7 +146,7 @@ void ReferenceModel1Dot2::SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirec
 /****************************************/
 /****************************************/
 
-CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings ReferenceModel1Dot2::GetOmnidirectionalCameraInput() const
+CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings ReferenceModel1Dot2::GetOmnidirectionalCameraInput() const
 {
     return m_sOmnidirectionalCameraInput;
 }

@@ -97,12 +97,12 @@ public:
     /*
      * Getter for the omnidirectional camera input.
      */
-    CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings GetOmnidirectionalCameraInput() const;
+    CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings GetOmnidirectionalCameraInput() const;
 
     /*
      * Setter for the omnidirectional camera input.
      */
-    void SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings s_omnidirectional_camera_input);
+    void SetOmnidirectionalCameraInput(CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings s_omnidirectional_camera_input);
 
     /*
      * Getter for the number of surrounding robots.
@@ -176,7 +176,7 @@ private:
     /*
      * The omnidirectional camera input.
      */
-    CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings m_sOmnidirectionalCameraInput;
+    CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings m_sOmnidirectionalCameraInput;
 
     /*
      * The number of surrounding robots.

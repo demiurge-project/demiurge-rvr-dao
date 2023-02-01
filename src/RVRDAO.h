@@ -37,7 +37,7 @@
 #include <argos3/plugins/robots/rvr/control_interface/ci_rvr_light_sensor.h>
 #include <argos3/plugins/robots/rvr/control_interface/ci_rvr_ground_color_sensor.h>
 #include <argos3/plugins/robots/rvr/control_interface/ci_rvr_lidar_sensor.h>
-#include <argos3/plugins/robots/generic/control_interface/ci_colored_blob_omnidirectional_camera_sensor.h>
+#include <argos3/plugins/robots/rvr/control_interface/ci_rvr_colored_blob_omnidirectional_camera_sensor.h>
 
 namespace argos
 {
@@ -165,16 +165,16 @@ namespace argos
         /**
          * Getter for the omnidirectional camera input.
          */
-        virtual CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings GetOmnidirectionalCameraInput() const
+        virtual CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings GetOmnidirectionalCameraInput() const
         {
-            CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings emptyList;
+            CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings emptyList;
             return emptyList;
         }
 
         /**
          * Setter for the omnidirectional camera input.
          */
-        virtual void SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings s_omni_camera_input){};
+        virtual void SetOmnidirectionalCameraInput(CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings s_omni_camera_input){};
 
         /*
          * Getter for the number of surrounding robots.
