@@ -329,9 +329,9 @@ void ReferenceModel1Dot2::FindBeacons()
     }
 
     // each group will be represented by the average (Value, Angle) over the group
-    std::vector<CCI_RVRLidarSensor::SReading> neighbourPositions;
+    std::vector<CCI_RVRLidarSensor::SReading> beaconsPositions;
     // group ids go from 0 to n_neigh => n_neigh +1 groups
-    // neighbourPositions.resize(n_neigh + 1);
+    // beaconsPositions.resize(n_neigh + 1);
     for (int i = 0; i <= n_neigh; ++i)
     {
         // all the positions for this particular group i
@@ -346,7 +346,7 @@ void ReferenceModel1Dot2::FindBeacons()
         if (groupPositions.size() < 5)
         {
             // probably noise, ignore it
-            // neighbourPositions.at(i) = CCI_RVRLidarSensor::SReading(0, CRadians::ZERO);
+            // beaconsPositions.at(i) = CCI_RVRLidarSensor::SReading(0, CRadians::ZERO);
             continue;
         }
         // compute mean
@@ -356,13 +356,13 @@ void ReferenceModel1Dot2::FindBeacons()
             groupSum[0] += groupMember.Value;
             groupSum[1] += groupMember.Angle.GetValue();
         }
-        neighbourPositions.push_back(CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size())));
+        beaconsPositions.push_back(CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size())));
     }
-    m_vecBeacons.resize(neighbourPositions.size());
-    for (int i = 0; i < neighbourPositions.size(); i++)
+    m_vecBeacons.resize(beaconsPositions.size());
+    for (int i = 0; i < beaconsPositions.size(); i++)
     {
-        m_vecBeacons.at(i).Angle = neighbourPositions.at(i).Angle;
-        m_vecBeacons.at(i).Distance = neighbourPositions.at(i).Value;
+        m_vecBeacons.at(i).Angle = beaconsPositions.at(i).Angle;
+        m_vecBeacons.at(i).Distance = beaconsPositions.at(i).Value;
     }
     SetNumberBeacons(m_vecBeacons.size());
 }
@@ -429,7 +429,6 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors
     // }
     // we now have the position of each neighbour
     // we can compute the attraction vector
-    // In the epuck, the vector sums possibly many messages from the same robot, artificially increasing the attraction vector.
     CVector2 lidarVectorSum(0, CRadians::ZERO);
     for (auto &robotPosition : m_vecNeighbors)
     {
@@ -442,12 +441,15 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToNeighbors
     return cLidarReading;
 }
 
+/****************************************/
+/****************************************/
+
 CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToBeacons()
 {
     FindBeacons();
     // for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
     // {
-    //     neighbourPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput.BlobList[i]->Distance, m_sOmnidirectionalCameraInput.BlobList[i]->Angle);
+    //     beaconsPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput.BlobList[i]->Distance, m_sOmnidirectionalCameraInput.BlobList[i]->Angle);
     // }
     // we now have the position of each neighbour
     // we can compute the attraction vector
