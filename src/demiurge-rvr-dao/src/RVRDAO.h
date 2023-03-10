@@ -37,7 +37,7 @@
 #include <argos3/plugins/robots/rvr/control_interface/ci_rvr_light_sensor.h>
 #include <argos3/plugins/robots/rvr/control_interface/ci_rvr_ground_color_sensor.h>
 #include <argos3/plugins/robots/rvr/control_interface/ci_rvr_lidar_sensor.h>
-#include <argos3/plugins/robots/generic/control_interface/ci_colored_blob_omnidirectional_camera_sensor.h>
+#include <argos3/plugins/robots/rvr/control_interface/ci_rvr_colored_blob_omnidirectional_camera_sensor.h>
 
 namespace argos
 {
@@ -97,6 +97,20 @@ namespace argos
          * Getter for the random number generetor.
          */
         CRandom::CRNG *GetRandomNumberGenerator() const;
+        
+        
+        const Real &GetMaxDistBetweenPoints() const;
+        void SetMaxDistBetweenPoints(const Real &fMaxDistBetweenPoints);
+        const Real &GetMaxAngleBetweenPoints() const;
+        void SetMaxAngleBetweenPoints(const Real &fMaxAngleBetweenPoints);
+        const UInt32 &GetMinSizeGroup() const;
+        void SetMinSizeGroup(const UInt32 &unMinSizeGroup);
+        const UInt32 &GetMaxSizeGroup() const;
+        void SetMaxSizeGroup(const UInt32 &unMaxSizeGroup);
+        const UInt32 &GetMinPeak() const;
+        void SetMinPeak(const UInt32 &unMinPeak);
+        const UInt32 &GetMaxPeak() const;
+        void SetMaxPeak(const UInt32 &unMaxPeak);
 
         /*******************/
         /* Virtual classes */
@@ -167,16 +181,16 @@ namespace argos
         /**
          * Getter for the omnidirectional camera input.
          */
-        virtual CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings GetOmnidirectionalCameraInput() const
+        virtual CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings GetOmnidirectionalCameraInput() const
         {
-            CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings emptyList;
+            CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings emptyList;
             return emptyList;
         }
 
         /**
          * Setter for the omnidirectional camera input.
          */
-        virtual void SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings s_omni_camera_input){};
+        virtual void SetOmnidirectionalCameraInput(CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings s_omni_camera_input){};
 
         /*
          * Getter for the number of surrounding robots.
@@ -252,6 +266,7 @@ namespace argos
         };
 
         virtual void InitROS(){};
+        
 
     protected:
         /*
@@ -283,6 +298,14 @@ namespace argos
          * Indicates if the robot has updated its readings according to ROS.
          */
         bool m_bHasRealRobotConnection;
+        
+        Real m_fMaxDistBetweenPoints;
+        Real m_fMaxAngleBetweenPoints;
+        UInt32 m_unMinSizeGroup;
+        UInt32 m_unMaxSizeGroup;
+        UInt32 m_unMinPeak;
+        UInt32 m_unMaxPeak;
+        
     };
 }
 

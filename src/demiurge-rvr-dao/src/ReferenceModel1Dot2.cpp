@@ -67,6 +67,7 @@ CCI_RVRProximitySensor::SReading ReferenceModel1Dot2::GetProximityReading()
         }
         
         cSumProxi += CVector2(fNormalizeDistance, m_sProximityInput[i].Angle.SignedNormalize());
+
     }
     // avoid neighbours
     FindNeighbours();
@@ -76,11 +77,13 @@ CCI_RVRProximitySensor::SReading ReferenceModel1Dot2::GetProximityReading()
         {
             Real sDistToObstacle = m_vecNeighbors.at(i).Distance - 0.275; // - 2 radii of the robot
             sDistToObstacle = sDistToObstacle <= 0.0f ? 0.001f : sDistToObstacle;
+            
             fNormalizeDistance = ((1 / m_sProximityInput[i].Value) - 3.6364) / 996.3636;
 
             cSumProxi += CVector2(fNormalizeDistance, m_vecNeighbors.at(i).Angle.SignedNormalize());
         }
     }
+    
     cOutputReading.Value = (cSumProxi.Length() > 1) ? 1 : cSumProxi.Length();
     cOutputReading.Angle = cSumProxi.Angle().SignedNormalize();
     return cOutputReading;
@@ -147,7 +150,7 @@ void ReferenceModel1Dot2::SetGroundInput(CCI_RVRGroundColorSensor::SReading s_gr
 /****************************************/
 /****************************************/
 
-void ReferenceModel1Dot2::SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings s_omni_input)
+void ReferenceModel1Dot2::SetOmnidirectionalCameraInput(CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings s_omni_input)
 {
     m_sOmnidirectionalCameraInput = s_omni_input;
 }
@@ -155,7 +158,7 @@ void ReferenceModel1Dot2::SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirec
 /****************************************/
 /****************************************/
 
-CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings ReferenceModel1Dot2::GetOmnidirectionalCameraInput() const
+CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings ReferenceModel1Dot2::GetOmnidirectionalCameraInput() const
 {
     return m_sOmnidirectionalCameraInput;
 }
@@ -165,19 +168,9 @@ CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings ReferenceModel1Dot2::GetOm
 
 void ReferenceModel1Dot2::FindNeighbours()
 {
-    if (!m_bHasRealRobotConnection)
+    if (!m_bHasRealRobotConnection) // no readings
     {
-        // the camera readings already contains the neighbours
         m_vecNeighbors.clear();
-        // set every neighbour as the distance and angle from the bloblist
-        for (size_t i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
-        {
-            if (m_sOmnidirectionalCameraInput.BlobList[i]->Distance < 75 && m_sOmnidirectionalCameraInput.BlobList[i]->Color == CColor::RED)
-            {
-                m_vecNeighbors.push_back(Neighbour(m_sOmnidirectionalCameraInput.BlobList[i]->Distance,
-                                                   m_sOmnidirectionalCameraInput.BlobList[i]->Angle));
-            }
-        }
         SetNumberNeighbors(m_vecNeighbors.size());
         return;
     }
@@ -263,8 +256,8 @@ void ReferenceModel1Dot2::FindNeighbours()
     m_vecNeighbors.resize(neighbourPositions.size());
     for (int i = 0; i < neighbourPositions.size(); i++)
     {
-        // CCI_ColoredBlobOmnidirectionalCameraSensor::SBlob dummyBlob(CColor::BLACK, neighbourPositions.at(i).Angle, neighbourPositions.at(i).Value);
-        // m_vecNeighbors = new CCI_ColoredBlobOmnidirectionalCameraSensor::SBlob(CColor::BLACK, neighbourPositions.at(i).Angle, neighbourPositions.at(i).Value);
+        // CCI_RVRColoredBlobOmnidirectionalCameraSensor::SBlob dummyBlob(CColor::BLACK, neighbourPositions.at(i).Angle, neighbourPositions.at(i).Value);
+        // m_vecNeighbors = new CCI_RVRColoredBlobOmnidirectionalCameraSensor::SBlob(CColor::BLACK, neighbourPositions.at(i).Angle, neighbourPositions.at(i).Value);
         m_vecNeighbors.at(i).Angle = neighbourPositions.at(i).Angle;
         m_vecNeighbors.at(i).Distance = neighbourPositions.at(i).Value;
         // std::cout << "Distance : " << m_vecNeighbors.at(i).Distance << " | Angle : " << m_vecNeighbors.at(i).Angle << std::endl;
@@ -278,20 +271,10 @@ void ReferenceModel1Dot2::FindNeighbours()
 
 void ReferenceModel1Dot2::FindBeacons()
 {
-    if (!m_bHasRealRobotConnection) // always simulation for this branch
+    if (!m_bHasRealRobotConnection) // no readings
     {
-        // the camera readings already contains the neighbours
+
         m_vecBeacons.clear();
-        // set every neighbour as the distance and angle from the bloblist
-        for (size_t i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
-        {   
-            // No distance limit for beacons
-            if (m_sOmnidirectionalCameraInput.BlobList[i]->Color == CColor::YELLOW)
-            {
-                m_vecBeacons.push_back(Neighbour(m_sOmnidirectionalCameraInput.BlobList[i]->Distance,
-                                                   m_sOmnidirectionalCameraInput.BlobList[i]->Angle));
-            }
-        }
         SetNumberBeacons(m_vecBeacons.size());
         return;
     }
@@ -304,7 +287,7 @@ void ReferenceModel1Dot2::FindBeacons()
     UInt16 latestObjectIndex;
     for (std::size_t i = 0; i < m_sLidarInput.size(); ++i)
     {
-        if (m_sLidarInput[i].Value > 2.75 || m_sLidarInput[i].Value < 0.10)
+        if (m_sLidarInput[i].Value > 2.5 || m_sLidarInput[i].Value < 0.10)
         {
             // we consider it is not an object beyond 2.75m or if the reading is too close to the sensor
             continue;
@@ -322,7 +305,7 @@ void ReferenceModel1Dot2::FindBeacons()
         // if the 2 points have a difference of
         // less than 2 cm in distance to current object and
         // less than 10 degrees (0.175) in angle then they belong to the same object
-        if (Abs(m_sLidarInput.at(i).Value - m_sLidarInput.at(latestObjectIndex).Value) < 0.02 && Abs(m_sLidarInput.at(i).Angle - m_sLidarInput.at(latestObjectIndex).Angle) < CRadians(0.175))
+        if (Abs(m_sLidarInput.at(i).Value - m_sLidarInput.at(latestObjectIndex).Value) < m_fMaxDistBetweenPoints && Abs(m_sLidarInput.at(i).Angle - m_sLidarInput.at(latestObjectIndex).Angle) < CRadians(m_fMaxAngleBetweenPoints))
         {
             neighbourId.at(i) = n_neigh;
             latestObjectIndex = i;
@@ -359,11 +342,11 @@ void ReferenceModel1Dot2::FindBeacons()
                 groupPositions.push_back(m_sLidarInput.at(j));
             }
         }
-        if (groupPositions.size() < 5)
+        if (groupPositions.size() < m_unMinSizeGroup || groupPositions.size() > m_unMaxSizeGroup)
         {
-            // probably noise, ignore it
+            // probably noise (5) or big object (35), ignore it
             // neighbourPositions.at(i) = CCI_RVRLidarSensor::SReading(0, CRadians::ZERO);
-            continue;
+	    continue;
         }
 
         // identify which group(s) correspond to beacon(s)
@@ -394,20 +377,22 @@ void ReferenceModel1Dot2::FindBeacons()
                 previousPosition = groupMember.Value;
             }          
         }
-        // if multiple min/max -> object has the complex shape of a beacon 
-        //(1 should be enough, but 2 taken in case of noise => needs testing)
-        if(nbPeaks > 2)
+        
+	// if multiple min/max -> object has the complex shape of a beacon 
+        //(between 3 and 10)
+        if(nbPeaks > m_unMinPeak && nbPeaks < m_unMaxPeak )
         {
-            // compute mean
+	    //compute mean
             std::vector<Real> groupSum(2, 0.0f);
             for (const auto &groupMember : groupPositions)
             {
-                groupSum[0] += groupMember.Value;
-                groupSum[1] += groupMember.Angle.GetValue();
+               groupSum[0] += groupMember.Value;
+               groupSum[1] += groupMember.Angle.GetValue();
             }
             beaconsPositions.push_back(CCI_RVRLidarSensor::SReading(groupSum[0] / groupPositions.size(), CRadians(groupSum[1] / groupPositions.size())));
-            std::cout << "Beacon detected at " << groupSum[0] / groupPositions.size() <<  "m and at angle " << CRadians(groupSum[1] / groupPositions.size()) <<std::endl;
+	    //std::cout << "Beacon detected at " << groupSum[0] / groupPositions.size() <<  "m and at angle " << CRadians(groupSum[1] / groupPositions.size()) << " and of size " << groupPositions.size() << " with peaks "<< nbPeaks << std::endl;
         }
+
         
     }
     m_vecBeacons.resize(beaconsPositions.size());
@@ -417,6 +402,7 @@ void ReferenceModel1Dot2::FindBeacons()
         m_vecBeacons.at(i).Distance = beaconsPositions.at(i).Value;
     }
     SetNumberBeacons(m_vecBeacons.size());
+    //std::cout << "Nb beacons " << m_vecBeacons.size() <<std::endl;
 }
 
 /****************************************/
@@ -501,7 +487,7 @@ CCI_RVRLidarSensor::SReading ReferenceModel1Dot2::GetAttractionVectorToBeacons()
     FindBeacons();
     // for (UInt8 i = 0; i < m_sOmnidirectionalCameraInput.BlobList.size(); i++)
     // {
-    //     neighbourPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput.BlobList[i]->Distance, m_sOmnidirectionalCameraInput.BlobList[i]->Angle);
+    //     beaconsPositions[i] = CCI_RVRLidarSensor::SReading(m_sOmnidirectionalCameraInput.BlobList[i]->Distance, m_sOmnidirectionalCameraInput.BlobList[i]->Angle);
     // }
     // we now have the position of each neighbour
     // we can compute the attraction vector

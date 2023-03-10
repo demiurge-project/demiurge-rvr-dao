@@ -120,12 +120,12 @@ public:
     /*
      * Getter for the omnidirectional camera input.
      */
-    CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings GetOmnidirectionalCameraInput() const;
+    CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings GetOmnidirectionalCameraInput() const;
 
     /*
      * Setter for the omnidirectional camera input.
      */
-    void SetOmnidirectionalCameraInput(CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings s_omnidirectional_camera_input);
+    void SetOmnidirectionalCameraInput(CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings s_omnidirectional_camera_input);
 
     /*
      * Getter for the number of surrounding robots.
@@ -147,7 +147,6 @@ public:
      */
     virtual void SetNumberBeacons(const UInt8 &un_number_beacons);
 
-
     /*
      * Getter for the vector representing the attraction force to the neighbors computed with lidar information
      */
@@ -157,6 +156,7 @@ public:
      * Getter for the vector representing the attraction force to the beacons computed with lidar information
      */
     CCI_RVRLidarSensor::SReading GetAttractionVectorToBeacons();
+
 
     /*
      * Getter for the center of mass of neighbors computed with RaB messages
@@ -196,9 +196,8 @@ private:
 
     /*
      * The omnidirectional camera input.
-     * This contains the position of each neighbour in simulation.
      */
-    CCI_ColoredBlobOmnidirectionalCameraSensor::SReadings m_sOmnidirectionalCameraInput;
+    CCI_RVRColoredBlobOmnidirectionalCameraSensor::SReadings m_sOmnidirectionalCameraInput;
 
     /*
      * The number of surrounding robots.

@@ -84,6 +84,57 @@ namespace argos
 
     const bool RVRDAO::HasRealRobotConnection() const
     {
-        return false;
+        return m_bHasRealRobotConnection;
+    }
+
+
+    void RVRDAO::SetMaxDistBetweenPoints(const Real &fMaxDistBetweenPoints)
+    {
+        m_fMaxDistBetweenPoints = fMaxDistBetweenPoints;
+    }
+    void RVRDAO::SetMaxAngleBetweenPoints(const Real &fMaxAngleBetweenPoints)
+    {
+        m_fMaxAngleBetweenPoints = fMaxAngleBetweenPoints;
+    }
+    void RVRDAO::SetMinSizeGroup(const UInt32 &unMinSizeGroup)
+    {
+        m_unMinSizeGroup = unMinSizeGroup;
+    }
+    void RVRDAO::SetMaxSizeGroup(const UInt32 &unMaxSizeGroup)
+    {
+        m_unMaxSizeGroup = unMaxSizeGroup;
+    }
+    void RVRDAO::SetMinPeak(const UInt32 &unMinPeak)
+    {
+        m_unMinPeak = unMinPeak;
+    }
+    void RVRDAO::SetMaxPeak(const UInt32 &unMaxPeak)
+    {
+        m_unMaxPeak = unMaxPeak;
+    }
+
+    const Real &RVRDAO::GetMaxDistBetweenPoints() const
+    {
+        return m_fMaxDistBetweenPoints;
+    }
+    const Real &RVRDAO::GetMaxAngleBetweenPoints() const
+    {
+        return m_fMaxAngleBetweenPoints;
+    }
+    const UInt32 &RVRDAO::GetMinSizeGroup() const
+    {
+        return m_unMinSizeGroup;
+    }
+    const UInt32 &RVRDAO::GetMaxSizeGroup() const
+    {
+        return m_unMaxSizeGroup;
+    }
+    const UInt32 &RVRDAO::GetMinPeak() const
+    {
+        return m_unMinPeak;
+    }
+    const UInt32 &RVRDAO::GetMaxPeak() const
+    {
+        return m_unMaxPeak;
     }
 }
