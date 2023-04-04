@@ -279,7 +279,6 @@ void ReferenceModel1Dot2::FindBeacons()
         SetNumberBeacons(m_vecBeacons.size());
         return;
     }
-
     std::vector<CCI_RVRLidarSensor::SReading> beaconsPositions;
     if (m_sBeaconInput.Length() != 0.0)
     {
@@ -409,7 +408,7 @@ void ReferenceModel1Dot2::FindBeacons()
     {
         m_vecBeacons.at(i).Angle = beaconsPositions.at(i).Angle;
         m_vecBeacons.at(i).Distance = beaconsPositions.at(i).Value;
-        std::cout << "Beacon detected at " << m_vecBeacons.at(i).Distance <<  "m and at angle " << m_vecBeacons.at(i).Angle << std::endl;
+        //std::cout << "Beacon detected at " << m_vecBeacons.at(i).Distance <<  "m and at angle " << m_vecBeacons.at(i).Angle << std::endl;
     }
     SetNumberBeacons(m_vecBeacons.size());
     //std::cout << "Nb beacons " << m_vecBeacons.size() <<std::endl;
