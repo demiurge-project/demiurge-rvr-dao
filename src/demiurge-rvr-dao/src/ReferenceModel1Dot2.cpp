@@ -14,6 +14,7 @@ ReferenceModel1Dot2::ReferenceModel1Dot2()
     m_fMaxVelocity = 0; // 12 cm/s (real max speed is 155 cm/s but it is used as is by automode)
     m_fLeftWheelVelocity = 0;
     m_fRightWheelVelocity = 0;
+    m_sBeaconInput = *new CVector2(0.0,0.0);
     m_bHasRealRobotConnection = false;
 }
 
@@ -278,6 +279,13 @@ void ReferenceModel1Dot2::FindBeacons()
         SetNumberBeacons(m_vecBeacons.size());
         return;
     }
+
+    std::vector<CCI_RVRLidarSensor::SReading> beaconsPositions;
+    if (m_sBeaconInput.Length() != 0.0)
+    {
+        beaconsPositions.push_back(CCI_RVRLidarSensor::SReading(m_sBeaconInput.Length(), m_sBeaconInput.Angle()));
+    }
+    /*
     // identify groups of points which are objects (robots, beqcons, or unrelated objects)
     int16_t n_neigh = -1;
     // array of neighbours id which identifies uniquely a given object
@@ -395,14 +403,17 @@ void ReferenceModel1Dot2::FindBeacons()
 
         
     }
+    */
     m_vecBeacons.resize(beaconsPositions.size());
     for (int i = 0; i < beaconsPositions.size(); i++)
     {
         m_vecBeacons.at(i).Angle = beaconsPositions.at(i).Angle;
         m_vecBeacons.at(i).Distance = beaconsPositions.at(i).Value;
+        std::cout << "Beacon detected at " << m_vecBeacons.at(i).Distance <<  "m and at angle " << m_vecBeacons.at(i).Angle << std::endl;
     }
     SetNumberBeacons(m_vecBeacons.size());
     //std::cout << "Nb beacons " << m_vecBeacons.size() <<std::endl;
+
 }
 
 /****************************************/
@@ -588,6 +599,9 @@ void ReferenceModel1Dot2::InitROS()
     // setup lidar subscriber
     lidar_sub = rosNode.subscribe("scan", 10, &ReferenceModel1Dot2::LidarHandler, this);
 
+    // setup beacon subscriber
+    beacon_sub = rosNode.subscribe("color_object_position", 10, &ReferenceModel1Dot2::BeaconHandler, this);
+
     // setup velocity publisher
     vel_pub = rosNode.advertise<std_msgs::Float32MultiArray>("/rvr/wheels_speed", 10, true);
     // setup velocity messages
@@ -652,6 +666,12 @@ void ReferenceModel1Dot2::LidarHandler(const sensor_msgs::LaserScan &msg)
         m_sLidarInput[i].Angle = CRadians(msg.angle_min + i * msg.angle_increment);
         m_sLidarInput[i].Value = msg.ranges[i];
     }
+}
+
+void ReferenceModel1Dot2::BeaconHandler(const geometry_msgs::Vector3 &msg)
+{
+    m_sBeaconInput.SetX(msg.x);
+    m_sBeaconInput.SetY(msg.y);
 }
 
 void ReferenceModel1Dot2::PublishVelocity()

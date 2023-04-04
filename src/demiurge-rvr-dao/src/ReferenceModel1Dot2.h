@@ -8,6 +8,7 @@
 #include <std_msgs/ColorRGBA.h>
 #include <std_msgs/Float32MultiArray.h>
 #include <geometry_msgs/Twist.h>
+#include <geometry_msgs/Vector3.h>
 #include <nav_msgs/Odometry.h>
 #include <rvr_reference_model/Leds.h>
 #include <sensor_msgs/Imu.h>
@@ -214,6 +215,9 @@ private:
 
     /** The list of beacons */
     std::vector<Neighbour> m_vecBeacons;
+    
+    /** The list of beacons */
+    CVector2 m_sBeaconInput;
 
 public:
     /*
@@ -242,6 +246,9 @@ public:
 
     /* Handler for lidar Laserscan data */
     virtual void LidarHandler(const sensor_msgs::LaserScan &msg);
+    
+    /* Handler for beacon Vector3 data */
+    virtual void BeaconHandler(const geometry_msgs::Vector3 &msg);
 
     virtual void PublishVelocity();
 
@@ -252,7 +259,7 @@ public:
     virtual void FindNeighbours();
 
     /*
-     * Clusters the lidar readings to beacons, or uses the virtual camera in
+     * Get camera readings for beacons, or uses the virtual camera in
      * simulation
      */
     virtual void FindBeacons();
@@ -269,6 +276,9 @@ private:
 
     /* Lidar subscriber */
     ros::Subscriber lidar_sub;
+    
+    /* Beacon subscriber */
+    ros::Subscriber beacon_sub;
 
     /* Actuators publishers */
 
